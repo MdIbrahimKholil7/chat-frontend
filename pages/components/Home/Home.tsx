@@ -3,7 +3,7 @@ import Register from '../Share/Register';
 
 const Main = () => {
     return (
-        <div>
+        <div className='bg-[#212533]'>
             <Register/>
         </div>
     );

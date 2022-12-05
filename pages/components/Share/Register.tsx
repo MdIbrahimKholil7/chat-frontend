@@ -17,6 +17,7 @@ interface Form {
 }
 
 const Register = () => {
+
   const [cookies, setCookie] = useCookies(["chatToken"]);
   const [addUser, { data, isLoading, isError, error, isSuccess }] =
     useAddUserMutation();
@@ -71,12 +72,7 @@ const Register = () => {
         return setFormError({ message: "Your confirm password don't match" });
       }
     }
-    console.log(formData);
-    // const submit = target.submitBtn.value;
-    // const login = target.loginBtn.value;
-
-    // console.log(name, email,login);
-
+   
     if (show) {
       await addUser({ name, email, password });
       setFormData({
@@ -91,8 +87,8 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen my-20">
-      <h1 className="text-center my-10 text-2xl font-bold">Chat App</h1>
+    <div className="h-screen py-20">
+      <h1 className="text-center my-10 text-2xl font-bold text-white">Chat App</h1>
       <div className="flex justify-center items-center ">
         <div className="card flex-shrink-0 w-full lg:max-w-[500px] shadow-2xl bg-base-100 py-10">
           <div className="card-body">

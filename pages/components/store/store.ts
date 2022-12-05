@@ -14,7 +14,9 @@ export const store = configureStore({
     devTools: process.env.NODE_ENV !== "production",
 
     middleware: getDefaultMiddleware =>
-        getDefaultMiddleware().concat(apiSlice.middleware),
+        getDefaultMiddleware({
+            serializableCheck: false,
+          }).concat(apiSlice.middleware),
 })
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors

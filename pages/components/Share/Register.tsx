@@ -2,8 +2,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useAddUserMutation } from "../features/auth/authApi";
+import {
+  useAddUserMutation,
+  useLoginUserMutation,
+} from "../features/auth/authApi";
 import Error from "../utils/Error";
+import { useCookies } from "react-cookie";
 
 interface Form {
   name: string;
@@ -13,11 +17,16 @@ interface Form {
 }
 
 const Register = () => {
+  const [cookies, setCookie] = useCookies(["chatToken"]);
   const [addUser, { data, isLoading, isError, error, isSuccess }] =
     useAddUserMutation();
-  const [formError, setFormError] = useState<any>("");
 
-  const auth = useSelector((state) => state);
+  const [formError, setFormError] = useState<any>("");
+  const [
+    loginUser,
+    { data: loginData, isLoading: loginLoading, error: loginError },
+  ] = useLoginUserMutation();
+  const auth = useSelector((state: any) => state.auth);
   console.log(auth);
 
   const [formData, setFormData] = useState<Form>({
@@ -30,40 +39,55 @@ const Register = () => {
   const [show, setShow] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log(data);
+    if (data) {
+      setFormError({
+        message: "",
+      });
+    }
+
     if (error) {
-      // console.log(error?.message);
-      if ( 'status' in error) {
-        setFormError(error?.data)
-        // console.log(error?.data?.message)
+      if ("status" in error) {
+        setFormError(error?.data);
       }
     }
-  }, [data, error]);
+    if (loginError) {
+      if ("status" in loginError) {
+        setFormError(loginError?.data);
+      }
+    }
+  }, [data, error, loginError]);
+  console.log(loginError);
 
-  const handleForm = async (e: React.SyntheticEvent):Promise<any> => {
-
+  const handleForm = async (e: React.SyntheticEvent): Promise<any> => {
     e.preventDefault();
+
     const { name, email, password, confirmPass } = formData;
     const target = e.target as typeof e.target & {
       loginBtn: { value: string };
       submitBtn: { value: string };
     };
+    if (show) {
+      if (password !== confirmPass) {
+        return setFormError({ message: "Your confirm password don't match" });
+      }
+    }
     console.log(formData);
-    const submit = target.submitBtn.value;
+    // const submit = target.submitBtn.value;
     // const login = target.loginBtn.value;
 
     // console.log(name, email,login);
 
-    if (submit) {
-     await addUser({ name, email, password });
+    if (show) {
+      await addUser({ name, email, password });
       setFormData({
         name: "",
         email: "",
         password: "",
         confirmPass: "",
-      })
+      });
+    } else {
+      loginUser({ email, password });
     }
-    // return any
   };
 
   return (
@@ -105,6 +129,7 @@ const Register = () => {
                     placeholder="Name"
                     className="input input-bordered"
                     name="name"
+                    required
                   />
                 </div>
               )}
@@ -121,6 +146,7 @@ const Register = () => {
                   placeholder="email"
                   className="input input-bordered"
                   name="email"
+                  required
                 />
               </div>
               <div className="form-control">
@@ -136,6 +162,7 @@ const Register = () => {
                   placeholder="password"
                   className="input input-bordered"
                   name="password"
+                  required
                 />
               </div>
               {show && (
@@ -152,10 +179,11 @@ const Register = () => {
                     placeholder="password"
                     className="input input-bordered"
                     name="confirmPass"
+                    required
                   />
                 </div>
               )}
-              {formError && <Error message={formError?.message} />}
+              {(error || loginError) && <Error message={formError?.message} />}
 
               {!show && (
                 <div className="form-control mt-6">

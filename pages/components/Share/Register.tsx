@@ -1,24 +1,56 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAddUserMutation } from "../features/auth/authApi";
+
+interface Form {
+  name: string;
+  email: string;
+  password: string;
+  confirmPass: string;
+}
 
 const Register = () => {
-  // const location = useLocation()
-  // const navigate = useNavigate()
-  const [formData, setFormData] = useState({});
-  const router = useRouter();
-  console.log(router.query);
-  console.log(router.pathname);
+  const [addUser, { data, isLoading, isError, error, isSuccess }] =
+    useAddUserMutation();
+
+  const [formData, setFormData] = useState<Form>({
+    name: "",
+    email: "",
+    password: "",
+    confirmPass: "",
+  });
+
   const [show, setShow] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log(data);
+    if(error){
+        console.log(error)
+    }
+  }, [data,error]);
 
   const handleForm = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    try {
-      //   console.log(e.target.btn.value);
-      //   if (e.target.btn.value === "Sign Up") {
-      //   }
-    } catch (error) {
-      console.log(error);
+    const { name, email, password, confirmPass } = formData;
+    const target = e.target as typeof e.target & {
+      loginBtn: { value: string };
+      submitBtn: { value: string };
+    };
+    console.log(formData);
+    const submit = target.submitBtn.value;
+    // const login = target.loginBtn.value;
+
+    // console.log(name, email,login);
+
+    if (submit) {
+      addUser({ name, email, password });
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPass: "",
+      });
     }
   };
 
@@ -53,12 +85,14 @@ const Register = () => {
                     <span className="label-text">Name</span>
                   </label>
                   <input
+                    value={formData?.name}
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
                     type="text"
                     placeholder="Name"
                     className="input input-bordered"
+                    name="name"
                   />
                 </div>
               )}
@@ -67,12 +101,14 @@ const Register = () => {
                   <span className="label-text">Email</span>
                 </label>
                 <input
+                  value={formData?.email}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
                   type="text"
                   placeholder="email"
                   className="input input-bordered"
+                  name="email"
                 />
               </div>
               <div className="form-control">
@@ -80,6 +116,7 @@ const Register = () => {
                   <span className="label-text">Password</span>
                 </label>
                 <input
+                  value={formData?.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
@@ -95,6 +132,7 @@ const Register = () => {
                     <span className="label-text">Confirm Password</span>
                   </label>
                   <input
+                    value={formData?.confirmPass}
                     onChange={(e) =>
                       setFormData({ ...formData, confirmPass: e.target.value })
                     }
@@ -109,7 +147,7 @@ const Register = () => {
                 <div className="form-control mt-6">
                   <input
                     type="submit"
-                    name="btn"
+                    name="loginBtn"
                     className="btn btn-primary"
                     value="Login"
                   />
@@ -119,9 +157,10 @@ const Register = () => {
                 <div className="form-control mt-6">
                   <input
                     type="submit"
-                    name="btn"
+                    name="submitBtn"
                     className="btn btn-primary"
                     value="Sign Up"
+                    disabled={isLoading}
                   />
                 </div>
               )}

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useAddUserMutation } from "../features/auth/authApi";
+import Error from "../utils/Error";
 
 interface Form {
   name: string;
@@ -13,6 +15,10 @@ interface Form {
 const Register = () => {
   const [addUser, { data, isLoading, isError, error, isSuccess }] =
     useAddUserMutation();
+  const [formError, setFormError] = useState<any>("");
+
+  const auth = useSelector((state) => state);
+  console.log(auth);
 
   const [formData, setFormData] = useState<Form>({
     name: "",
@@ -25,12 +31,17 @@ const Register = () => {
 
   useEffect(() => {
     console.log(data);
-    if(error){
-        console.log(error)
+    if (error) {
+      // console.log(error?.message);
+      if ( 'status' in error) {
+        setFormError(error?.data)
+        // console.log(error?.data?.message)
+      }
     }
-  }, [data,error]);
+  }, [data, error]);
 
-  const handleForm = async (e: React.SyntheticEvent) => {
+  const handleForm = async (e: React.SyntheticEvent):Promise<any> => {
+
     e.preventDefault();
     const { name, email, password, confirmPass } = formData;
     const target = e.target as typeof e.target & {
@@ -44,14 +55,15 @@ const Register = () => {
     // console.log(name, email,login);
 
     if (submit) {
-      addUser({ name, email, password });
+     await addUser({ name, email, password });
       setFormData({
         name: "",
         email: "",
         password: "",
         confirmPass: "",
-      });
+      })
     }
+    // return any
   };
 
   return (
@@ -143,6 +155,8 @@ const Register = () => {
                   />
                 </div>
               )}
+              {formError && <Error message={formError?.message} />}
+
               {!show && (
                 <div className="form-control mt-6">
                   <input

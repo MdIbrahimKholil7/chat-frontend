@@ -6,7 +6,7 @@ import { UserForm } from '../types/types'
 // Define a service using a base URL and expected endpoints
 export const apiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/', credentials: "include", }),
+  baseQuery: fetchBaseQuery  ({ baseUrl: 'http://localhost:8080/'}),
   endpoints: (builder) => ({
 
   }),

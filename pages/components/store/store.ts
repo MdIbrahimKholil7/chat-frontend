@@ -9,7 +9,7 @@ export const store = configureStore({
     reducer: {
 
         [apiSlice.reducerPath]: apiSlice.reducer,
-        authSliceReducer: authSlice
+        auth: authSlice
     },
     devTools: process.env.NODE_ENV !== "production",
 

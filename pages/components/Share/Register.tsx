@@ -101,7 +101,7 @@ const Register = () => {
                 onClick={() => setShow(false)}
                 className={`w-full ${
                   !show && "bg-gray-500 text-white"
-                } px-5 py-3  rounded-full text-xl`}
+                } px-5 py-2 sm:py-3  rounded-full text-[16px] sm:text-xl`}
               >
                 Login
               </button>
@@ -109,7 +109,7 @@ const Register = () => {
                 onClick={() => setShow(true)}
                 className={`w-full ${
                   show && "bg-gray-500 text-white"
-                } px-5 py-3  rounded-full text-xl`}
+                } px-5 py-2 sm:py-3 text-[16px] sm:text-xl rounded-full text-xl`}
               >
                 Sign Up
               </button>

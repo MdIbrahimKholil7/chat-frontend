@@ -10,6 +10,7 @@ import { useGetUserQuery } from "../features/friend/friendApi";
 import Loader from "../utils/Loader";
 import MessengerRightBar from "./MessengerRightBar";
 import MessageBody from "./MessageBody";
+import PrivateRoute from "../utils/PrivateRoute";
 
 const Message = () => {
   const { data: users, isLoading, isError, error } = useGetUserQuery();
@@ -29,31 +30,33 @@ const Message = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="bg-[#212533] h-screen text-white">
-      <div className="flex h-full">
-        <div className="max-w-[400px]  border-r-2 border-white max-h-screen pt-5">
-          <MessageLeftBar />
-          <div className="cursor-pointer border-b-[1px] border-white pb-9 ">
-            <div className="px-3">
-              <Slider {...settings}>
-                {data.map((d, i) => (
-                  <ActiveUser key={i} />
-                ))}
-              </Slider>
+    <PrivateRoute>
+      <div className="bg-[#212533] h-screen text-white">
+        <div className="flex h-full">
+          <div className="max-w-[400px]  border-r-2 border-white max-h-screen pt-5">
+            <MessageLeftBar />
+            <div className="cursor-pointer border-b-[1px] border-white pb-9 ">
+              <div className="px-3">
+                <Slider {...settings}>
+                  {data.map((d, i) => (
+                    <ActiveUser key={i} />
+                  ))}
+                </Slider>
+              </div>
+            </div>
+            <div className="mt-14 overflow-y-auto max-h-[66%] scrollbar-hide overflow-hidden px-3">
+              <AllUsers />
             </div>
           </div>
-          <div className="mt-14 overflow-y-auto max-h-[66%] scrollbar-hide overflow-hidden px-3">
-            <AllUsers />
-          </div>
-        </div>
-        <div className=" w-full h-full">
-          <MessengerRightBar />
-          <div className="h-[90%]">
-            <MessageBody />
+          <div className=" w-full h-full">
+            <MessengerRightBar />
+            <div className="h-[90%]">
+              <MessageBody />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </PrivateRoute>
   );
 };
 

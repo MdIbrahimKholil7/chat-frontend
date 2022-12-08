@@ -2,6 +2,7 @@ import React from "react";
 import ActiveUser from "./ActiveUser";
 
 const MessengerHead = () => {
+
   return (
     <div className="border-b-[1px] border-white">
       <div className="flex items-center gap-7 py-4 px-5">
@@ -10,6 +11,8 @@ const MessengerHead = () => {
       </div>
     </div>
   );
+
 };
 
 export default MessengerHead;
+

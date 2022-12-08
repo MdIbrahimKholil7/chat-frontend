@@ -17,18 +17,16 @@ interface Form {
 }
 
 const Register = () => {
-
   const [cookies, setCookie] = useCookies(["chatToken"]);
-  const [addUser, { data, isLoading, isError, error, isSuccess }] =
+  const [addUser, { data, isLoading, isError, error, isSuccess }]: any =
     useAddUserMutation();
 
   const [formError, setFormError] = useState<any>("");
   const [
     loginUser,
     { data: loginData, isLoading: loginLoading, error: loginError },
-  ] = useLoginUserMutation();
+  ]: any = useLoginUserMutation();
   const auth = useSelector((state: any) => state.auth);
-  console.log(auth);
 
   const [formData, setFormData] = useState<Form>({
     name: "",
@@ -44,6 +42,13 @@ const Register = () => {
       setFormError({
         message: "",
       });
+      setCookie("chatToken", data?.token);
+    }
+    if (loginData) {
+      setFormError({
+        message: "",
+      });
+      setCookie("chatToken", loginData?.token);
     }
 
     if (error) {
@@ -56,8 +61,7 @@ const Register = () => {
         setFormError(loginError?.data);
       }
     }
-  }, [data, error, loginError]);
-  console.log(loginError);
+  }, [data, error, loginError, setCookie, loginData]);
 
   const handleForm = async (e: React.SyntheticEvent): Promise<any> => {
     e.preventDefault();
@@ -72,7 +76,7 @@ const Register = () => {
         return setFormError({ message: "Your confirm password don't match" });
       }
     }
-   
+
     if (show) {
       await addUser({ name, email, password });
       setFormData({
@@ -88,7 +92,9 @@ const Register = () => {
 
   return (
     <div className="h-screen py-20">
-      <h1 className="text-center my-10 text-2xl font-bold text-white">Chat App</h1>
+      <h1 className="text-center my-10 text-2xl font-bold text-white">
+        Chat App
+      </h1>
       <div className="flex justify-center items-center ">
         <div className="card flex-shrink-0 w-full lg:max-w-[500px] shadow-2xl bg-base-100 py-10">
           <div className="card-body">
@@ -184,6 +190,7 @@ const Register = () => {
               {!show && (
                 <div className="form-control mt-6">
                   <input
+                    disabled={loginLoading}
                     type="submit"
                     name="loginBtn"
                     className="btn btn-primary"

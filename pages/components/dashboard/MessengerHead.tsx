@@ -3,7 +3,7 @@ import ActiveUser from "./ActiveUser";
 
 const MessengerHead = () => {
   return (
-    <div>
+    <div className="border-b-[1px] border-white">
       <div className="flex items-center gap-7 py-4 px-5">
         <ActiveUser />
         <p className="font-bold text-xl text-white">Ibrahim Kholil</p>

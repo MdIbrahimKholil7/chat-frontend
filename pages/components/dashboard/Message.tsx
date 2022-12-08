@@ -9,6 +9,7 @@ import AllUsers from "./AllUsers";
 import { useGetUserQuery } from "../features/friend/friendApi";
 import Loader from "../utils/Loader";
 import MessengerRightBar from "./MessengerRightBar";
+import MessageBody from "./MessageBody";
 
 const Message = () => {
   const { data: users, isLoading, isError, error } = useGetUserQuery();
@@ -45,8 +46,11 @@ const Message = () => {
             <AllUsers />
           </div>
         </div>
-        <div className=" w-full">
+        <div className=" w-full h-full">
           <MessengerRightBar />
+          <div className="h-[90%]">
+            <MessageBody />
+          </div>
         </div>
       </div>
     </div>

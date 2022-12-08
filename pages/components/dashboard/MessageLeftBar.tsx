@@ -29,7 +29,7 @@ const MessageLeftBar = () => {
         <form action="">
           <input
             type="text"
-            placeholder="Type here"
+            placeholder="Search here"
             className="input input-bordered w-full bg-[#0b0f1d]"
           />
         </form>

@@ -2,14 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 // import { jokeApi } from './app/apiSlice'
 import { setupListeners } from '@rtk-incubator/rtk-query'
 import { apiSlice } from '../app/apiSlice'
-import authSlice from '../features/auth/authSlice'
+import authSliceReducer from '../features/auth/authSlice'
 // import { jokeApi } from './services/jokes'
 
 export const store = configureStore({
     reducer: {
 
         [apiSlice.reducerPath]: apiSlice.reducer,
-        auth: authSlice
+        auth: authSliceReducer
     },
     devTools: process.env.NODE_ENV !== "production",
 

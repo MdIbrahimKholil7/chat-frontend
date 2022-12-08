@@ -17,7 +17,7 @@ interface Form {
 }
 
 const Register = () => {
-  const [cookies, setCookie] = useCookies(["chatToken"]);
+  const [cookies, setCookie] = useCookies(["chatUser"]);
   const [addUser, { data, isLoading, isError, error, isSuccess }]: any =
     useAddUserMutation();
 
@@ -27,7 +27,7 @@ const Register = () => {
     { data: loginData, isLoading: loginLoading, error: loginError },
   ]: any = useLoginUserMutation();
   const auth = useSelector((state: any) => state.auth);
-
+  console.log(auth);
   const [formData, setFormData] = useState<Form>({
     name: "",
     email: "",
@@ -42,13 +42,15 @@ const Register = () => {
       setFormError({
         message: "",
       });
-      setCookie("chatToken", data?.token);
+      setCookie("chatUser", { data });
     }
     if (loginData) {
       setFormError({
         message: "",
       });
-      setCookie("chatToken", loginData?.token);
+      // console.log(loginData);
+
+      setCookie("chatUser", { data:loginData });
     }
 
     if (error) {

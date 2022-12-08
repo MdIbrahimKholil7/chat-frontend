@@ -6,6 +6,7 @@ module.exports = {
 
   daisyui: {
     themes: [
+
       {
         light: {
           primary: "#1b2857fb",
@@ -36,6 +37,6 @@ module.exports = {
       "light",
     ],
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"),require('tailwind-scrollbar-hide')],
 };
 

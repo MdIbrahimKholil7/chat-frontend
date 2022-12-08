@@ -6,7 +6,7 @@ import userImg from "../assets/user.png";
 const MessageLeftBar = () => {
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-3">
         <div>
           <Image
             className="rounded-full"
@@ -25,7 +25,7 @@ const MessageLeftBar = () => {
           </p>
         </div>
       </div>
-      <div className="my-7">
+      <div className="my-7 px-3">
         <form action="">
           <input
             type="text"

@@ -1,15 +1,19 @@
 import React from "react";
+import { Users } from "../types/types";
 import ActiveUser from "./ActiveUser";
 
-const AllUsers = () => {
+const AllUsers = ({ users }: any) => {
   const data: number[] = [1, 2, 3, 4, 5, 3, 3, 4, 5, 3, 3, 4, 5, 3];
   return (
     <div>
       <div>
-        {data.map((d, i) => (
-          <div key={i} className="flex items-center gap-4 my-3 cursor-pointer hover:bg-[#39394e] py-2 px-2 rounded-md duration-150">
+        {users?.map((user: Users, i: number) => (
+          <div
+            key={i}
+            className="flex items-center gap-4 my-3 cursor-pointer hover:bg-[#39394e] py-2 px-2 rounded-md duration-150"
+          >
             <ActiveUser />
-            <p>Robert</p>
+            <p>{user?.name}</p>
           </div>
         ))}
       </div>

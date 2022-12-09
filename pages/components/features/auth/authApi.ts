@@ -21,7 +21,7 @@ export const authSlice = apiSlice.injectEndpoints({
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 const result = await queryFulfilled;
-        
+
                 dispatch(userLoggedIn(result.data))
             }
         }),
@@ -33,7 +33,7 @@ export const authSlice = apiSlice.injectEndpoints({
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 const result = await queryFulfilled;
-             
+
                 dispatch(userLoggedIn(result))
             }
         }),
@@ -44,8 +44,11 @@ export const authSlice = apiSlice.injectEndpoints({
                 dispatch(userLoggedIn(result))
             }
         }),
+        getAllUser: builder.query<FetchArgs, void>({
+            query: () => "/api/v1/user/getAllUser",
+        }),
     })
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useGetUserInformationQuery } = authSlice
+export const { useAddUserMutation, useLoginUserMutation, useGetUserInformationQuery, useGetAllUserQuery } = authSlice
 

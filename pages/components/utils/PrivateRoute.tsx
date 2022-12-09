@@ -12,9 +12,7 @@ type Props = {
 const PrivateRoute = ({ children }: Props) => {
   const router = useRouter();
   const [cookies, removeCookie]: any = useCookies(["chatUser"]);
-
   const dispatch = useDispatch();
-  console.log(cookies?.chatUser);
 
   useEffect((): any => {
     if (!cookies?.chatUser?.data?.token) {
@@ -28,13 +26,13 @@ const PrivateRoute = ({ children }: Props) => {
 
   useEffect((): any => {
     if (cookies?.chatUser?.data?.token) {
-      console.log("hey");
+   
       if (data) {
-        console.log(data?.result);
+     
         cookies.chatUser.data.result = data?.result;
       }
       if (isError) {
-        console.log(error);
+   
         removeCookie("chatUser");
         router.push("/");
       }

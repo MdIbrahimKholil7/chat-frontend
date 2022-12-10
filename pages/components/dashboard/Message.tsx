@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import ActiveUser from "./ActiveUser";
 import MessageLeftBar from "./MessageLeftBar";
 // Import css files
@@ -6,13 +6,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import AllUsers from "./AllUsers";
-import { useGetUserQuery } from "../features/friend/friendApi";
+
 import Loader from "../utils/Loader";
 import MessengerRightBar from "./MessengerRightBar";
 import MessageBody from "./MessageBody";
-import PrivateRoute from "../utils/PrivateRoute";
 import { useGetAllUserQuery } from "../features/auth/authApi";
-import { Friend } from "../types/types";
 import { useSelector } from "react-redux";
 
 const Message = () => {
@@ -45,6 +43,7 @@ const Message = () => {
 
   if (isLoading) return <Loader />;
 
+  console.log(error)
   return (
     <div className="bg-[#212533] h-screen text-white">
       <div className="flex h-full">
@@ -73,7 +72,7 @@ const Message = () => {
             </>
           ) : (
             <div className="w-full h-full flex justify-center items-center text-white">
-              <h3 className="text-2xl font-bold">
+              <h3 className="text-2xl font-bold font-serif">
                 Please select your friend to start chat
               </h3>
             </div>

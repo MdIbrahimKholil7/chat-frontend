@@ -19,6 +19,10 @@ export type Friend={
     name: string,
     email: string,
     _id: string,
-    
+
 }
 
+export type MessageAdd={
+    receiverId:string,
+    message:string
+}

@@ -1,14 +1,17 @@
 import React from "react";
+import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
+import { userLoggedIn } from "../features/auth/authSlice";
 import { addFriend } from "../features/friend/friendSlice";
 import { Users } from "../types/types";
 import ActiveUser from "./ActiveUser";
 
 const AllUsers = ({ users }: any) => {
   const dispatch = useDispatch();
-
+  const [cookies] = useCookies(["chatUser"]);
   const handleAddFriend = (user: Users): void => {
     dispatch(addFriend(user));
+    dispatch(userLoggedIn(cookies?.chatUser));
   };
   return (
     <div>

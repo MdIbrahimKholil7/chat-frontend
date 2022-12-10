@@ -50,7 +50,7 @@ const Register = () => {
       });
       // console.log(loginData);
 
-      setCookie("chatUser", { data:loginData });
+      setCookie("chatUser", { data:loginData },/* { path: '/dashboard' } */);
     }
 
     if (error) {

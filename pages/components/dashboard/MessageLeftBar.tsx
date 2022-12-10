@@ -5,7 +5,7 @@ import { FaEdit } from "react-icons/fa";
 import userImg from "../assets/user.png";
 import { Users } from "../types/types";
 const MessageLeftBar = ({ data }: any) => {
-  console.log(data);
+  
   return (
     <div>
       <div className="flex justify-between items-center px-3">

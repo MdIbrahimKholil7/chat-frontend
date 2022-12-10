@@ -1,7 +1,10 @@
 import React from "react";
 import MessengerHead from "./MessengerHead";
 
-const MessengerRightBar = () => {
+
+
+
+const MessengerRightBar = ({}) => {
   return (
     <div>
       <MessengerHead />

@@ -3,20 +3,22 @@ import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@rtk-incubator/rtk-query'
 import { apiSlice } from '../app/apiSlice'
 import authSliceReducer from '../features/auth/authSlice'
+import friendSliceReducer from '../features/friend/friendSlice'
 // import { jokeApi } from './services/jokes'
 
 export const store = configureStore({
     reducer: {
 
         [apiSlice.reducerPath]: apiSlice.reducer,
-        auth: authSliceReducer
+        auth: authSliceReducer,
+        friend: friendSliceReducer
     },
     devTools: process.env.NODE_ENV !== "production",
 
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
             serializableCheck: false,
-          }).concat(apiSlice.middleware),
+        }).concat(apiSlice.middleware),
 })
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors

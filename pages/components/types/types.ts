@@ -15,3 +15,10 @@ export type Users = {
 
 }
 
+export type Friend={
+    name: string,
+    email: string,
+    _id: string,
+    
+}
+

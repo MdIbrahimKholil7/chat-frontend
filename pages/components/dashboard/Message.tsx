@@ -12,18 +12,22 @@ import MessengerRightBar from "./MessengerRightBar";
 import MessageBody from "./MessageBody";
 import PrivateRoute from "../utils/PrivateRoute";
 import { useGetAllUserQuery } from "../features/auth/authApi";
+import { Friend } from "../types/types";
+import { useSelector } from "react-redux";
 
 const Message = () => {
-  // const { data: users, isLoading, isError, error } = useGetUserQuery();
   const [fetch, setFetch] = useState(false);
-
+  const {
+    friend,
+  } = useSelector((state: any) => state?.friend);
+  const {name}=friend || {}
   const {
     data: allUser,
     isLoading,
     isError,
     error,
     refetch,
-  }:any = useGetAllUserQuery(undefined, {
+  }: any = useGetAllUserQuery(undefined, {
     skip: fetch,
   });
 
@@ -39,18 +43,7 @@ const Message = () => {
     arrows: false,
   };
 
-  useEffect(() => {
-    if (isError) {
-      console.log(error);
-    }
-    if (allUser) {
-      console.log(allUser);
-    }
-  }, [isError, error, allUser]);
-
   if (isLoading) return <Loader />;
-
-  // console.log(allUser)
 
   return (
     <div className="bg-[#212533] h-screen text-white">
@@ -67,16 +60,24 @@ const Message = () => {
             </div>
           </div>
           <div className="mt-14 overflow-y-auto max-h-[66%] scrollbar-hide overflow-hidden px-3">
-            <AllUsers 
-            users={allUser?.result}
-            />
+            <AllUsers users={allUser?.result} />
           </div>
         </div>
         <div className=" w-full h-full">
-          <MessengerRightBar />
-          <div className="h-[90%]">
-            <MessageBody />
-          </div>
+          {name ? (
+            <>
+              <MessengerRightBar />
+              <div className="h-[90%]">
+                <MessageBody />
+              </div>
+            </>
+          ) : (
+            <div className="w-full h-full flex justify-center items-center text-white">
+              <h3 className="text-2xl font-bold">
+                Please select your friend to start chat
+              </h3>
+            </div>
+          )}
         </div>
       </div>
     </div>

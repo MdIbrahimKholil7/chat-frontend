@@ -1,54 +1,116 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FiSend } from "react-icons/fi";
-import { useSelector } from "react-redux";
-import { useAddMessageMutation } from "../features/message/messageApi";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useAddMessageMutation,
+  useGetMessagesQuery,
+} from "../features/message/messageApi";
+import userImg from "../assets/user.png";
+import Image from "next/image";
+import { getMessages } from "../features/message/messagesSlice";
+import { Message } from "../types/types";
 
-const MessageBody = () => {
-  // add message
-  const [addMessage, { data, isLoading, isError, error }] =
-    useAddMessageMutation();
+interface Props {
+  scrollRef: any;
+}
+const MessageBody = ({ scrollRef }: Props) => {
+  const message = useSelector((state: any) => state.message);
+  const user = useSelector((state: any) => state.auth);
+  console.log(message);
   // get friend details
   const {
     friend: { _id },
   } = useSelector((state: any) => state.friend);
+  const {
+    data: messages,
+    isLoading: messageLoading,
+    error: messageError,
+  }: any = useGetMessagesQuery(_id);
 
-  const handleForm = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    const target = e.target as typeof e.target & {
-      input: { value: string };
-    };
+  const dispatch = useDispatch();
 
-    addMessage({
-      receiverId: _id,
-      message: target.input.value,
-    });
-    target.input.value = "";
-    console.log(target.input.value);
-  };
-  
-  console.log(error);
+  useEffect(() => {
+    if (messages) {
+      dispatch(getMessages(messages?.data));
+    }
+  }, [messages, dispatch]);
 
   return (
-    <div className="h-full ">
-      <div></div>
-      <form className="w-full h-full" onSubmit={handleForm}>
-        <div className="flex gap-8 items-end h-full  px-20">
-          <div className="w-full ">
-            <input
-              name="input"
-              type="text"
-              placeholder="Type here"
-              className="input input-bordered w-full bg-[#0b0f1d]"
-              autoComplete="off"
-            />
-          </div>
+    <div className=" overflow-y-auto scrollbar-hide ">
+      <div className="px-5 py-5 h-[820px]">
+        {message?.messages &&
+          message?.messages?.length > 0 &&
+          message?.messages?.map((msg: Message) => {
+            console.log(msg?.sender === user?.user?._id);
+            return msg?.sender === user?.user?._id ? (
+              <div ref={scrollRef} className="flex justify-end">
+                <div>
+                  <p className="text-end pb-2 text-gray-400 text-[12px] pr-4">3:10PM</p>
+                  <div className="flex px-3 items-center gap-3 justify-end">
+                    <Image
+                      width={40}
+                      height={40}
+                      className="rounded-full object-cover"
+                      src={userImg}
+                      alt="image"
+                    />
+                    <p className="bg-[#444242] px-7 py-3 rounded-full">
+                      {msg?.message}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div ref={scrollRef} className="flex-start flex my-3">
+                <div ref={scrollRef}>
+                  <p className="text-end pb-2 text-gray-400 text-[12px] pr-4">3:10PM</p>
+                  <div className="flex px-3 items-center gap-3 justify-start">
+                    <Image
+                      width={40}
+                      height={40}
+                      className="rounded-full object-cover"
+                      src={userImg}
+                      alt="image"
+                    />
+                    <p className="bg-[#444242] px-7 py-3 rounded-full">
+                      {msg?.message}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        {/* <div ref={scrollRef} className="flex justify-start">
           <div>
-            <button className="btn bg-[#0b0f1d] px-7 border-0 hover:bg-[#0b0f1d]">
-              <FiSend className="text-2xl text-white font-bold" />
-            </button>
+            <p className="text-end pb-2 text-gray-400">3:10PM</p>
+            <div className="flex px-3 items-center gap-3 justify-start">
+              <Image
+                width={40}
+                height={40}
+                className="rounded-full object-cover"
+                src={userImg}
+                alt="image"
+              />
+              <p className="bg-[#444242] px-7 py-3 rounded-full">Hello</p>
+            </div>
           </div>
         </div>
-      </form>
+        <div ref={scrollRef} className="flex-end">
+          <div ref={scrollRef}>
+            <p className="text-end pb-2 text-gray-400">3:10PM</p>
+            <div className="flex px-3 items-center gap-3 justify-end">
+              <Image
+                width={40}
+                height={40}
+                className="rounded-full object-cover"
+                src={userImg}
+                alt="image"
+              />
+              <p className="bg-[#444242] px-7 py-3 rounded-full">Hello</p>
+            </div>
+          </div>
+        </div> */}
+      </div>
     </div>
   );
 };

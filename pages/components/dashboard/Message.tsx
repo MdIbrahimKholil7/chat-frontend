@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ActiveUser from "./ActiveUser";
 import MessageLeftBar from "./MessageLeftBar";
 // Import css files
@@ -12,23 +12,23 @@ import MessengerRightBar from "./MessengerRightBar";
 import MessageBody from "./MessageBody";
 import { useGetAllUserQuery } from "../features/auth/authApi";
 import { useSelector } from "react-redux";
+import MessageSend from "./MessageSend";
 
 const Message = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [fetch, setFetch] = useState(false);
-  const {
-    friend,
-  } = useSelector((state: any) => state?.friend);
-  const {name}=friend || {}
+  const { friend } = useSelector((state: any) => state?.friend);
+  const { name } = friend || {};
   const {
     data: allUser,
     isLoading,
     isError,
     error,
     refetch,
-  }: any = useGetAllUserQuery(undefined, {
-    skip: fetch,
-  });
-
+  }: any = useGetAllUserQuery(undefined, {});
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [fetch]);
   const data: number[] = [1, 2, 3, 4, 5, 3, 3, 4, 5, 3, 3, 4, 5, 3];
   const settings: any = {
     dots: false,
@@ -36,14 +36,13 @@ const Message = () => {
     slidesToShow: 5,
     slidesToScroll: 2,
     speed: 500,
-
     cssEase: "linear",
     arrows: false,
   };
 
   if (isLoading) return <Loader />;
 
-  console.log(error)
+  console.log(error);
   return (
     <div className="bg-[#212533] h-screen text-white">
       <div className="flex h-full">
@@ -66,8 +65,11 @@ const Message = () => {
           {name ? (
             <>
               <MessengerRightBar />
-              <div className="h-[90%]">
-                <MessageBody />
+              <div className="max-h-[82%] overflow-y-auto scrollbar-hide">
+                <MessageBody scrollRef={scrollRef} />
+              </div>
+              <div className="mt-5">
+                <MessageSend setFetch={setFetch} fetch={fetch} />
               </div>
             </>
           ) : (

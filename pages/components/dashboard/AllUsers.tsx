@@ -3,6 +3,7 @@ import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { userLoggedIn } from "../features/auth/authSlice";
 import { addFriend } from "../features/friend/friendSlice";
+import { resetMessages } from "../features/message/messagesSlice";
 import { Users } from "../types/types";
 import ActiveUser from "./ActiveUser";
 
@@ -12,6 +13,7 @@ const AllUsers = ({ users }: any) => {
   const handleAddFriend = (user: Users): void => {
     dispatch(addFriend(user));
     dispatch(userLoggedIn(cookies?.chatUser));
+    dispatch(resetMessages([]))
   };
   return (
     <div>

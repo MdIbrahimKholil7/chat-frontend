@@ -26,3 +26,9 @@ export type MessageAdd={
     receiverId:string,
     message:string
 }
+
+export type Message={
+    sender:string,
+    receiver:string,
+    message:string
+}

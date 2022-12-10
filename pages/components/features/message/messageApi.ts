@@ -19,9 +19,19 @@ export const messageSlice = apiSlice.injectEndpoints({
                 method: "POST",
                 body: data
             }),
+            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+                try {
+                    const result = await queryFulfilled
+                    console.log('add Message',result)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }),
+        getMessages: builder.query<FetchArgs, void>({
+            query: (id) => `/api/v1/message/getMessages/${id}`,
         }),
     })
 })
 
-export const { useAddMessageMutation } = messageSlice
-
+export const { useAddMessageMutation, useGetMessagesQuery } = messageSlice

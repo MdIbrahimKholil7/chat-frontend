@@ -4,6 +4,8 @@ import { setupListeners } from '@rtk-incubator/rtk-query'
 import { apiSlice } from '../app/apiSlice'
 import authSliceReducer from '../features/auth/authSlice'
 import friendSliceReducer from '../features/friend/friendSlice'
+import messagesSliceReducer from '../features/message/messagesSlice'
+
 // import { jokeApi } from './services/jokes'
 
 export const store = configureStore({
@@ -11,7 +13,8 @@ export const store = configureStore({
 
         [apiSlice.reducerPath]: apiSlice.reducer,
         auth: authSliceReducer,
-        friend: friendSliceReducer
+        friend: friendSliceReducer,
+        message:messagesSliceReducer
     },
     devTools: process.env.NODE_ENV !== "production",
 

@@ -10,11 +10,13 @@ import ActiveUser from "./ActiveUser";
 const AllUsers = ({ users }: any) => {
   const dispatch = useDispatch();
   const [cookies] = useCookies(["chatUser"]);
+
   const handleAddFriend = (user: Users): void => {
     dispatch(addFriend(user));
     dispatch(userLoggedIn(cookies?.chatUser));
-    dispatch(resetMessages([]))
+    dispatch(resetMessages([]));
   };
+
   return (
     <div>
       <div>

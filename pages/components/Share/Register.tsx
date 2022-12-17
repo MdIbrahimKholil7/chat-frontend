@@ -20,7 +20,7 @@ const Register = () => {
   const [cookies, setCookie] = useCookies(["chatUser"]);
   const [addUser, { data, isLoading, isError, error, isSuccess }]: any =
     useAddUserMutation();
-
+  const router = useRouter();
   const [formError, setFormError] = useState<any>("");
   const [
     loginUser,
@@ -43,6 +43,7 @@ const Register = () => {
         message: "",
       });
       setCookie("chatUser", { data });
+      router.push("/components/dashboard/MessageHome");
     }
     if (loginData) {
       setFormError({
@@ -50,7 +51,8 @@ const Register = () => {
       });
       // console.log(loginData);
 
-      setCookie("chatUser", { data:loginData },/* { path: '/dashboard' } */);
+      setCookie("chatUser", { data: loginData } /* { path: '/dashboard' } */);
+      router.push("/components/dashboard/MessageHome");
     }
 
     if (error) {

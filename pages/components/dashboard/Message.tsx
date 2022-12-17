@@ -11,14 +11,24 @@ import Loader from "../utils/Loader";
 import MessengerRightBar from "./MessengerRightBar";
 import MessageBody from "./MessageBody";
 import { useGetAllUserQuery } from "../features/auth/authApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MessageSend from "./MessageSend";
+import { SocketUser } from "../types/types";
+import { addActiveUsers } from "../features/socket/socketSlice";
+const { io } = require("socket.io-client");
 
 const Message = () => {
+
   const scrollRef = useRef<HTMLDivElement>(null);
+  const socketRef = useRef<any>();
+  const [number, setNumber] = useState<number>(0)
   const [fetch, setFetch] = useState(false);
   const { friend } = useSelector((state: any) => state?.friend);
+  const { auth } = useSelector((state: any) => state);
   const { name } = friend || {};
+  const { activeUser:{activeUsers} } = useSelector((state: any) => state);
+  const dispatch = useDispatch();
+  let scrollNumber=0
   const {
     data: allUser,
     isLoading,
@@ -26,15 +36,48 @@ const Message = () => {
     error,
     refetch,
   }: any = useGetAllUserQuery(undefined, {});
+
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [fetch]);
-  const data: number[] = [1, 2, 3, 4, 5, 3, 3, 4, 5, 3, 3, 4, 5, 3];
+
+  useEffect(() => {
+    socketRef.current = io("http://localhost:5000");
+  }, []);
+
+  useEffect(() => {
+    socketRef.current.emit("add-user", auth?.user?._id, auth?.user);
+  }, [auth]);
+
+  useEffect(() => {
+    socketRef.current.on("getUser", (user: SocketUser[]) => {
+      dispatch(addActiveUsers(user));
+    });
+  }, [dispatch]);
+
+  useEffect(()=>{
+    if(activeUsers?.length===1){
+      setNumber(1)
+    }
+    if(activeUsers?.length===2){
+      setNumber(2)
+    }
+    if(activeUsers?.length===3){
+      setNumber(2)
+    }
+    if(activeUsers?.length>=5){
+      setNumber(4)
+    }
+  },[activeUsers,number])
+
+
+  const data: number[] = [1, 2,4,8,8];
+
   const settings: any = {
     dots: false,
     infinite: true,
-    slidesToShow: 5,
-    slidesToScroll: 2,
+    slidesToShow: number,
+    slidesToScroll: 1,
     speed: 500,
     cssEase: "linear",
     arrows: false,
@@ -42,7 +85,6 @@ const Message = () => {
 
   if (isLoading) return <Loader />;
 
-  console.log(error);
   return (
     <div className="bg-[#212533] h-screen text-white">
       <div className="flex h-full">
@@ -51,7 +93,7 @@ const Message = () => {
           <div className="cursor-pointer border-b-[1px] border-white pb-9 ">
             <div className="px-3">
               <Slider {...settings}>
-                {data.map((d, i) => (
+                {activeUsers?.length && data.map((d, i) => (
                   <ActiveUser key={i} />
                 ))}
               </Slider>

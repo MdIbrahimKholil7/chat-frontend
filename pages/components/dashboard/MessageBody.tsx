@@ -36,16 +36,17 @@ const MessageBody = ({ scrollRef }: Props) => {
   }, [messages, dispatch]);
 
   return (
-    <div className=" overflow-y-auto scrollbar-hide ">
+    <div ref={scrollRef} className=" overflow-y-auto scrollbar-hide ">
       <div className="px-5 py-5 h-[820px]">
         {message?.messages &&
           message?.messages?.length > 0 &&
           message?.messages?.map((msg: Message) => {
-            console.log(msg?.sender === user?.user?._id);
             return msg?.sender === user?.user?._id ? (
-              <div ref={scrollRef} className="flex justify-end">
+              <div ref={scrollRef} className="flex justify-end my-4">
                 <div>
-                  <p className="text-end pb-2 text-gray-400 text-[12px] pr-4">3:10PM</p>
+                  <p className="text-end pb-2 text-gray-400 text-[12px] pr-5 ">
+                    3:10PM
+                  </p>
                   <div className="flex px-3 items-center gap-3 justify-end">
                     <Image
                       width={40}
@@ -61,9 +62,11 @@ const MessageBody = ({ scrollRef }: Props) => {
                 </div>
               </div>
             ) : (
-              <div ref={scrollRef} className="flex-start flex my-3">
-                <div ref={scrollRef}>
-                  <p className="text-end pb-2 text-gray-400 text-[12px] pr-4">3:10PM</p>
+              <div ref={scrollRef} className="flex-start flex my-4">
+                <div>
+                  <p className="text-end pb-2 text-gray-400 text-[12px] pr-4">
+                    3:10PM
+                  </p>
                   <div className="flex px-3 items-center gap-3 justify-start">
                     <Image
                       width={40}
@@ -80,36 +83,6 @@ const MessageBody = ({ scrollRef }: Props) => {
               </div>
             );
           })}
-        {/* <div ref={scrollRef} className="flex justify-start">
-          <div>
-            <p className="text-end pb-2 text-gray-400">3:10PM</p>
-            <div className="flex px-3 items-center gap-3 justify-start">
-              <Image
-                width={40}
-                height={40}
-                className="rounded-full object-cover"
-                src={userImg}
-                alt="image"
-              />
-              <p className="bg-[#444242] px-7 py-3 rounded-full">Hello</p>
-            </div>
-          </div>
-        </div>
-        <div ref={scrollRef} className="flex-end">
-          <div ref={scrollRef}>
-            <p className="text-end pb-2 text-gray-400">3:10PM</p>
-            <div className="flex px-3 items-center gap-3 justify-end">
-              <Image
-                width={40}
-                height={40}
-                className="rounded-full object-cover"
-                src={userImg}
-                alt="image"
-              />
-              <p className="bg-[#444242] px-7 py-3 rounded-full">Hello</p>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );

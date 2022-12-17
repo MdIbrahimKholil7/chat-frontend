@@ -5,6 +5,7 @@ import { apiSlice } from '../app/apiSlice'
 import authSliceReducer from '../features/auth/authSlice'
 import friendSliceReducer from '../features/friend/friendSlice'
 import messagesSliceReducer from '../features/message/messagesSlice'
+import socketSliceReducer from '../features/socket/socketSlice'
 
 // import { jokeApi } from './services/jokes'
 
@@ -14,10 +15,12 @@ export const store = configureStore({
         [apiSlice.reducerPath]: apiSlice.reducer,
         auth: authSliceReducer,
         friend: friendSliceReducer,
-        message:messagesSliceReducer
+        message: messagesSliceReducer,
+        activeUser: socketSliceReducer
     },
-    devTools: process.env.NODE_ENV !== "production",
 
+    devTools: process.env.NODE_ENV !== "production",
+    
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
             serializableCheck: false,

@@ -32,3 +32,26 @@ export type Message={
     receiver:string,
     message:string
 }
+
+export type SocketUser={
+    socketId:string,
+    userId:string,
+    user:{
+        name:string,
+        _id:string,
+        email:string,
+        password?:string
+    }
+}
+
+export type SocketUsers={
+    socketId:string,
+    userId:string,
+    user:{
+        name:string,
+        _id:string,
+        email:string,
+        password?:string
+    }
+}
+

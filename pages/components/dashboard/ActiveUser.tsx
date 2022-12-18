@@ -1,7 +1,11 @@
 import Image from "next/image";
 import React from "react";
 import userImg from "../assets/user.png";
+import { SocketUser } from "../types/types";
 
+interface Props {
+  activeUsers: SocketUser[] | {};
+}
 const ActiveUser = () => {
   return (
     <div>

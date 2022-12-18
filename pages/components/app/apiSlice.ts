@@ -13,7 +13,7 @@ export const apiSlice = createApi({
     baseUrl: 'http://localhost:8080/',
     prepareHeaders: async (headers, { getState, endpoint }: any) => {
       const token = getState()?.auth?.accessToken;
-      console.log('token',getState()?.auth)
+     
       headers.set("Authorization", `Bearer ${token}`);
       return headers;
     },

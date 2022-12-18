@@ -1,13 +1,17 @@
 import React from "react";
+import { SocketUser } from "../types/types";
 import MessengerHead from "./MessengerHead";
 
+interface Props {
+  activeUsers: SocketUser[] | [];
+}
 
-
-
-const MessengerRightBar = ({}) => {
+const MessengerRightBar = ({ activeUsers }: Props) => {
   return (
     <div>
-      <MessengerHead />
+      <MessengerHead 
+      activeUsers={activeUsers}
+      />
     </div>
   );
 };

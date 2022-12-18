@@ -21,7 +21,7 @@ const PrivateRoute = ({ children }: Props) => {
       dispatch(userLoggedIn(cookies?.chatUser));
     }
   }, [cookies, dispatch, router, removeCookie]);
-  console.log(cookies?.chatUser)
+
   const { data, isLoading, isError, error }: any = useGetUserInformationQuery();
 
   useEffect((): any => {

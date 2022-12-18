@@ -14,21 +14,20 @@ import { useGetAllUserQuery } from "../features/auth/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import MessageSend from "./MessageSend";
 import { SocketUser } from "../types/types";
-import { addActiveUsers } from "../features/socket/socketSlice";
+
 const { io } = require("socket.io-client");
 
 const Message = () => {
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<any>();
-  const [number, setNumber] = useState<number>(0)
+  const [number, setNumber] = useState<number>(0);
   const [fetch, setFetch] = useState(false);
   const { friend } = useSelector((state: any) => state?.friend);
   const { auth } = useSelector((state: any) => state);
   const { name } = friend || {};
-  const { activeUser:{activeUsers} } = useSelector((state: any) => state);
+  const [activeUsers, setActiveUsers] = useState<SocketUser[] | []>([]);
   const dispatch = useDispatch();
-  let scrollNumber=0
+  let scrollNumber = 0;
   const {
     data: allUser,
     isLoading,
@@ -51,27 +50,27 @@ const Message = () => {
 
   useEffect(() => {
     socketRef.current.on("getUser", (user: SocketUser[]) => {
-      dispatch(addActiveUsers(user));
+      const uArr = user.filter((u: SocketUser) => u.userId !== auth?.user?._id);
+      setActiveUsers(uArr);
     });
-  }, [dispatch]);
+  }, [auth]);
 
-  useEffect(()=>{
-    if(activeUsers?.length===1){
-      setNumber(1)
+  useEffect(() => {
+    if (activeUsers?.length === 1) {
+      setNumber(1);
     }
-    if(activeUsers?.length===2){
-      setNumber(2)
+    if (activeUsers?.length === 2) {
+      setNumber(2);
     }
-    if(activeUsers?.length===3){
-      setNumber(2)
+    if (activeUsers?.length === 3) {
+      setNumber(2);
     }
-    if(activeUsers?.length>=5){
-      setNumber(4)
+    if (activeUsers?.length >= 5) {
+      setNumber(4);
     }
-  },[activeUsers,number])
+  }, [activeUsers, number]);
 
-
-  const data: number[] = [1, 2,4,8,8];
+  const data: number[] = [1, 2, 4, 8, 8];
 
   const settings: any = {
     dots: false,
@@ -93,9 +92,8 @@ const Message = () => {
           <div className="cursor-pointer border-b-[1px] border-white pb-9 ">
             <div className="px-3">
               <Slider {...settings}>
-                {activeUsers?.length && data.map((d, i) => (
-                  <ActiveUser key={i} />
-                ))}
+                {activeUsers?.length &&
+                  data.map((d, i) => <ActiveUser key={i} />)}
               </Slider>
             </div>
           </div>
@@ -106,7 +104,9 @@ const Message = () => {
         <div className=" w-full h-full">
           {name ? (
             <>
-              <MessengerRightBar />
+              <MessengerRightBar 
+              activeUsers={activeUsers}
+              />
               <div className="max-h-[82%] overflow-y-auto scrollbar-hide">
                 <MessageBody scrollRef={scrollRef} />
               </div>

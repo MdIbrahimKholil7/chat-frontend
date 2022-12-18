@@ -27,7 +27,7 @@ const Register = () => {
     { data: loginData, isLoading: loginLoading, error: loginError },
   ]: any = useLoginUserMutation();
   const auth = useSelector((state: any) => state.auth);
-  console.log(auth);
+ 
   const [formData, setFormData] = useState<Form>({
     name: "",
     email: "",

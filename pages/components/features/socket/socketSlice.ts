@@ -9,7 +9,7 @@ const socketSlice = createSlice({
     initialState,
     reducers: {
         addActiveUsers: (state, action) => {
-            console.log(action.payload)
+     
             state.activeUsers = action.payload
         },
     },

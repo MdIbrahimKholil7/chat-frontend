@@ -22,7 +22,7 @@ export const messageSlice = apiSlice.injectEndpoints({
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     const result = await queryFulfilled
-                    console.log('add Message',result)
+                
                 } catch (error) {
                     console.log(error)
                 }

@@ -17,7 +17,7 @@ socketRef:any,
 const MessageBody = ({ scrollRef,socketRef}: Props) => {
   const message = useSelector((state: any) => state.message);
   const user = useSelector((state: any) => state.auth);
-  console.log(message)
+
   // get friend details
   const {
     friend: { _id },
@@ -38,12 +38,9 @@ const MessageBody = ({ scrollRef,socketRef}: Props) => {
 
   useEffect(() => {
     socketRef?.current?.on("sendMessage", (msg: SendMessage) => {
-      console.log("msg", msg);
+   
     });
   }, [socketRef])
-
-
-
 
 
   return (

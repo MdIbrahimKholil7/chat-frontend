@@ -37,7 +37,7 @@ const Message = () => {
     error,
     refetch,
   }: any = useGetAllUserQuery(undefined, {});
-
+  console.log(friend)
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [fetch]);
@@ -45,23 +45,7 @@ const Message = () => {
   useEffect(() => {
     socketRef.current = io("http://localhost:5000");
     socketRef.current.on("sendMessageToUser", (data: Message) => {
-      console.log(data, "data");
       setUserSocketMsg(data);
-      console.log(userSocketMsg, "msf");
-      // if (data?.receiverId) {
-      //   console.log("hello");
-      //   const { sender, receiverId, message } = data;
-      //   dispatch(
-      //     getMessages([
-      //       {
-      //         sender,
-      //         receiverId,
-      //         message,
-      //       },
-      //     ])
-      //   );
-      // }
-  
     });
   }, []);
 
@@ -78,11 +62,9 @@ const Message = () => {
   }, [auth]);
 
   useEffect(() => {
-    console.log(userSocketMsg, "sokcetnsf");
+   
     const { sender, receiverId, message } = userSocketMsg || {};
-    console.log(friend,auth)
-    if (receiverId === auth?.user?._id && friend._id === sender) {
-      console.log("hello");
+    if (receiverId === auth?.user?._id && friend?._id === sender) {
       dispatch(
         getMessages([
           {
@@ -116,14 +98,14 @@ const Message = () => {
     dots: false,
     infinite: true,
     slidesToShow: number,
-    slidesToScroll: 1,
+    slidesToScroll: 2,
     speed: 500,
     cssEase: "linear",
     arrows: false,
   };
 
   if (isLoading) return <Loader />;
-
+  console.log(activeUsers)
   return (
     <div className="bg-[#212533] h-screen text-white">
       <div className="flex h-full">
@@ -133,7 +115,9 @@ const Message = () => {
             <div className="px-3">
               <Slider {...settings}>
                 {activeUsers?.length &&
-                  data.map((d, i) => <ActiveUser key={i} />)}
+                  activeUsers?.map((d, i) => <ActiveUser 
+                  data={d}
+                  key={i} />)}
               </Slider>
             </div>
           </div>

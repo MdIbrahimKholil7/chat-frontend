@@ -11,8 +11,6 @@ export type Users = {
     name: string,
     email: string,
     _id: string
-
-
 }
 
 export type Friend = {

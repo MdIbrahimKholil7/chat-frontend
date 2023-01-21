@@ -45,7 +45,7 @@ const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
       ])
     );
     setFetch(!fetch);
-    console.log("socket", socketRef);
+    
     socketRef?.current?.emit("sendMessage", {
       receiverId: friend?.friend?._id,
       sender: user?._id,

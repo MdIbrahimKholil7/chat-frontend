@@ -8,7 +8,7 @@ import { Users } from "../types/types";
 const MessageLeftBar = ({ data }: any) => {
   const [cookies, removeCookie]: any = useCookies(["chatUser"]);
   const { name } = cookies?.chatUser?.data?.result || {};
-  // console.log(cookies?.chatUser?.data?.result);
+
   return (
     <div>
       <div className="flex justify-between items-center px-3 w-full">

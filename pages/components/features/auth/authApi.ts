@@ -33,7 +33,6 @@ export const authSlice = apiSlice.injectEndpoints({
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 const result = await queryFulfilled;
-
                 dispatch(userLoggedIn(result))
             }
         }),

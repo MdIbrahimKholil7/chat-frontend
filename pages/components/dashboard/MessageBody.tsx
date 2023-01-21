@@ -8,15 +8,16 @@ import {
 import userImg from "../assets/user.png";
 import Image from "next/image";
 import { getMessages } from "../features/message/messagesSlice";
-import { Message } from "../types/types";
+import { Message, SendMessage } from "../types/types";
 
 interface Props {
+socketRef:any,
   scrollRef: any;
 }
-const MessageBody = ({ scrollRef }: Props) => {
+const MessageBody = ({ scrollRef,socketRef}: Props) => {
   const message = useSelector((state: any) => state.message);
   const user = useSelector((state: any) => state.auth);
-  console.log(message);
+
   // get friend details
   const {
     friend: { _id },
@@ -34,6 +35,16 @@ const MessageBody = ({ scrollRef }: Props) => {
       dispatch(getMessages(messages?.data));
     }
   }, [messages, dispatch]);
+
+  useEffect(() => {
+    socketRef.current.on("sendMessage", (msg: SendMessage) => {
+      console.log("msg", msg);
+    });
+  }, [socketRef])
+
+
+
+
 
   return (
     <div ref={scrollRef} className=" overflow-y-auto scrollbar-hide ">

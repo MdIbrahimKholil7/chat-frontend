@@ -3,9 +3,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { UserForm } from '../types/types'
 // import type { Pokemon } from './types'
 
-
-
-
 // Define a service using a base URL and expected endpoints
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -13,7 +10,7 @@ export const apiSlice = createApi({
     baseUrl: 'http://localhost:8080/',
     prepareHeaders: async (headers, { getState, endpoint }: any) => {
       const token = getState()?.auth?.accessToken;
-     
+      console.log(token,'token')
       headers.set("Authorization", `Bearer ${token}`);
       return headers;
     },

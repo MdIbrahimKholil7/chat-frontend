@@ -9,7 +9,6 @@ const socketSlice = createSlice({
     initialState,
     reducers: {
         addActiveUsers: (state, action) => {
-     
             state.activeUsers = action.payload
         },
     },
@@ -17,3 +16,4 @@ const socketSlice = createSlice({
 
 export const { addActiveUsers } = socketSlice.actions;
 export default socketSlice.reducer;
+

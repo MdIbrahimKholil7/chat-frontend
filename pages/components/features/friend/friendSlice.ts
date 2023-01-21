@@ -14,7 +14,6 @@ const friendSlice = createSlice({
     initialState,
     reducers: {
         addFriend: (state, action) => {
-          
             state.friend = action?.payload;
         },
 

@@ -13,7 +13,7 @@ import MessageBody from "./MessageBody";
 import { useGetAllUserQuery } from "../features/auth/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import MessageSend from "./MessageSend";
-import { SocketUser } from "../types/types";
+import { SendMessage, SocketUser } from "../types/types";
 
 const { io } = require("socket.io-client");
 
@@ -51,6 +51,7 @@ const Message = () => {
   useEffect(() => {
     socketRef.current.on("getUser", (user: SocketUser[]) => {
       const uArr = user.filter((u: SocketUser) => u.userId !== auth?.user?._id);
+      
       setActiveUsers(uArr);
     });
   }, [auth]);
@@ -84,10 +85,11 @@ const Message = () => {
 
   if (isLoading) return <Loader />;
 
+  console.log(activeUsers)
   return (
     <div className="bg-[#212533] h-screen text-white">
       <div className="flex h-full">
-        <div className="max-w-[400px]  border-r-2 border-white max-h-screen pt-5">
+        <div className="w-[480px]  border-r-2 border-white max-h-screen pt-5">
           <MessageLeftBar data={allUser} />
           <div className="cursor-pointer border-b-[1px] border-white pb-9 ">
             <div className="px-3">
@@ -104,14 +106,16 @@ const Message = () => {
         <div className=" w-full h-full">
           {name ? (
             <>
-              <MessengerRightBar 
-              activeUsers={activeUsers}
-              />
+              <MessengerRightBar activeUsers={activeUsers} />
               <div className="max-h-[82%] overflow-y-auto scrollbar-hide">
-                <MessageBody scrollRef={scrollRef} />
+                <MessageBody socketRef={socketRef} scrollRef={scrollRef} />
               </div>
               <div className="mt-5">
-                <MessageSend setFetch={setFetch} fetch={fetch} />
+                <MessageSend
+                  socketRef={socketRef}
+                  setFetch={setFetch}
+                  fetch={fetch}
+                />
               </div>
             </>
           ) : (

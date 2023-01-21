@@ -9,9 +9,7 @@ interface Props {
 const MessengerRightBar = ({ activeUsers }: Props) => {
   return (
     <div>
-      <MessengerHead 
-      activeUsers={activeUsers}
-      />
+      <MessengerHead activeUsers={activeUsers} />
     </div>
   );
 };

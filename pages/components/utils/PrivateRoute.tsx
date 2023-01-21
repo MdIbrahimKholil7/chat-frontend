@@ -26,26 +26,21 @@ const PrivateRoute = ({ children }: Props) => {
 
   useEffect((): any => {
     if (cookies?.chatUser?.data?.token) {
-   
       if (data) {
-     
         cookies.chatUser.data.result = data?.result;
       }
       if (isError) {
-   
-        removeCookie("chatUser",/* {path:'/dashboard'} */);
+        removeCookie("chatUser" /* {path:'/dashboard'} */);
         router.push("/");
       }
     } else {
-     
       router.push("/");
     }
   }, [data, isError, error, cookies, router, removeCookie]);
 
   if (isLoading) return <Loader />;
- 
+
   if (!cookies?.chatUser?.data?.token) {
-    
     router.push("/");
     return;
   }

@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FiSend } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { useAddMessageMutation } from "../features/message/messageApi";
 import { getMessages } from "../features/message/messagesSlice";
+import { SendMessage } from "../types/types";
 
 interface Props {
+  socketRef: any;
   fetch: boolean;
   setFetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MessageSend = ({ setFetch,fetch }: Props) => {
+const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
+
   const dispatch = useDispatch();
   // add message
   const [addMessage, { data, isLoading, isError, error }] =
     useAddMessageMutation();
+
   const { user } = useSelector((state: any) => state.auth || {});
+  const { friend } = useSelector((state: any) => state || {});
+  
   // get friend details
   const {
     friend: { _id },
@@ -40,6 +46,11 @@ const MessageSend = ({ setFetch,fetch }: Props) => {
       ])
     );
     setFetch(!fetch);
+    console.log("socket", socketRef);
+    socketRef.current.emit("sendMessage", {
+      receiverId: friend?.friend?._id,
+      message: target.input.value,
+    });
     target.input.value = "";
   };
 

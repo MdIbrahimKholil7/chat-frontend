@@ -1,22 +1,27 @@
 import Image from "next/image";
 import React from "react";
+import { useCookies } from "react-cookie";
 import { BsThreeDots } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import userImg from "../assets/user.png";
 import { Users } from "../types/types";
 const MessageLeftBar = ({ data }: any) => {
-  
+  const [cookies, removeCookie]: any = useCookies(["chatUser"]);
+  const { name } = cookies?.chatUser?.data?.result || {};
+  // console.log(cookies?.chatUser?.data?.result);
   return (
     <div>
-      <div className="flex justify-between items-center px-3">
-        <div>
-          <Image
-            className="rounded-full"
-            src={userImg}
-            alt="image"
-            width={50}
-            height={50}
-          />
+      <div className="flex justify-between items-center px-3 w-full">
+        <div className="flex items-center gap-3">
+          <div className="relative w-[50px] h-[50px] cursor-pointer">
+            <Image
+              src={userImg}
+              alt="userImg"
+              className="rounded-full w-full h-full"
+            />
+            <div className="w-[10px] h-[10px] bg-green-500 rounded-full absolute top-[3px] right-[3px]"></div>
+          </div>
+          <p>{name}</p>
         </div>
         <div className="flex items-center gap-4">
           <p>

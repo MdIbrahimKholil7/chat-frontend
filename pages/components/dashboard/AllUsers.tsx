@@ -1,6 +1,6 @@
 import React from "react";
 import { useCookies } from "react-cookie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userLoggedIn } from "../features/auth/authSlice";
 import { addFriend } from "../features/friend/friendSlice";
 import { resetMessages } from "../features/message/messagesSlice";
@@ -10,11 +10,14 @@ import ActiveUser from "./ActiveUser";
 const AllUsers = ({ users }: any) => {
   const dispatch = useDispatch();
   const [cookies] = useCookies(["chatUser"]);
-
+  const { friend } = useSelector((state: any) => state?.friend || {});
+  const { _id } = friend || {};
   const handleAddFriend = (user: Users): void => {
     dispatch(addFriend(user));
     dispatch(userLoggedIn(cookies?.chatUser));
-    dispatch(resetMessages([]));
+    if (user?._id !== _id) {
+      dispatch(resetMessages([]));
+    }
   };
 
   return (

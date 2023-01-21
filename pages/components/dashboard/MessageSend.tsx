@@ -12,7 +12,6 @@ interface Props {
 }
 
 const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
-
   const dispatch = useDispatch();
   // add message
   const [addMessage, { data, isLoading, isError, error }] =
@@ -20,7 +19,7 @@ const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
 
   const { user } = useSelector((state: any) => state.auth || {});
   const { friend } = useSelector((state: any) => state || {});
-  
+
   // get friend details
   const {
     friend: { _id },
@@ -47,8 +46,9 @@ const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
     );
     setFetch(!fetch);
     console.log("socket", socketRef);
-    socketRef.current.emit("sendMessage", {
+    socketRef?.current?.emit("sendMessage", {
       receiverId: friend?.friend?._id,
+      sender: user?._id,
       message: target.input.value,
     });
     target.input.value = "";

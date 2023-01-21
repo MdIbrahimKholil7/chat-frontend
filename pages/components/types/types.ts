@@ -29,7 +29,7 @@ export type MessageAdd = {
 
 export type Message = {
     sender: string,
-    receiver: string,
+    receiverId: string,
     message: string
 }
 
@@ -43,6 +43,9 @@ export type SocketUser = {
         password?: string
     }
 }
+
+
+
 
 export type SocketUsers = {
     socketId: string,

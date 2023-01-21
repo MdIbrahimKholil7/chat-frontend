@@ -13,7 +13,8 @@ import MessageBody from "./MessageBody";
 import { useGetAllUserQuery } from "../features/auth/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import MessageSend from "./MessageSend";
-import { SendMessage, SocketUser } from "../types/types";
+import { Message, SendMessage, SocketUser } from "../types/types";
+import { getMessages } from "../features/message/messagesSlice";
 
 const { io } = require("socket.io-client");
 
@@ -26,6 +27,7 @@ const Message = () => {
   const { auth } = useSelector((state: any) => state);
   const { name } = friend || {};
   const [activeUsers, setActiveUsers] = useState<SocketUser[] | []>([]);
+  const [userSocketMsg, setUserSocketMsg] = useState<Message>();
   const dispatch = useDispatch();
   let scrollNumber = 0;
   const {
@@ -42,6 +44,25 @@ const Message = () => {
 
   useEffect(() => {
     socketRef.current = io("http://localhost:5000");
+    socketRef.current.on("sendMessageToUser", (data: Message) => {
+      console.log(data, "data");
+      setUserSocketMsg(data);
+      console.log(userSocketMsg, "msf");
+      // if (data?.receiverId) {
+      //   console.log("hello");
+      //   const { sender, receiverId, message } = data;
+      //   dispatch(
+      //     getMessages([
+      //       {
+      //         sender,
+      //         receiverId,
+      //         message,
+      //       },
+      //     ])
+      //   );
+      // }
+  
+    });
   }, []);
 
   useEffect(() => {
@@ -51,10 +72,28 @@ const Message = () => {
   useEffect(() => {
     socketRef.current.on("getUser", (user: SocketUser[]) => {
       const uArr = user.filter((u: SocketUser) => u.userId !== auth?.user?._id);
-      
+
       setActiveUsers(uArr);
     });
   }, [auth]);
+
+  useEffect(() => {
+    console.log(userSocketMsg, "sokcetnsf");
+    const { sender, receiverId, message } = userSocketMsg || {};
+    console.log(friend,auth)
+    if (receiverId === auth?.user?._id && friend._id === sender) {
+      console.log("hello");
+      dispatch(
+        getMessages([
+          {
+            sender,
+            receiverId,
+            message,
+          },
+        ])
+      );
+    }
+  }, [userSocketMsg,friend,auth?.user?._id,dispatch]);
 
   useEffect(() => {
     if (activeUsers?.length === 1) {
@@ -85,7 +124,6 @@ const Message = () => {
 
   if (isLoading) return <Loader />;
 
-  console.log(activeUsers)
   return (
     <div className="bg-[#212533] h-screen text-white">
       <div className="flex h-full">

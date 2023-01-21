@@ -27,7 +27,9 @@ const AllUsers = ({ users }: any) => {
           <div
             onClick={() => handleAddFriend(user)}
             key={i}
-            className="flex items-center gap-4 my-3 cursor-pointer hover:bg-[#39394e] py-2 px-2 rounded-md duration-150"
+            className={`${
+              _id === user._id && 'bg-[#39394e]'
+            } flex items-center gap-4 my-3 cursor-pointer hover:bg-[#39394e] py-2 px-2 rounded-md duration-150 `}
           >
             <ActiveUser />
             <p>{user?.name}</p>

@@ -17,16 +17,20 @@ socketRef:any,
 const MessageBody = ({ scrollRef,socketRef}: Props) => {
   const message = useSelector((state: any) => state.message);
   const user = useSelector((state: any) => state.auth);
-  console.log(message)
+  // console.log(message)
   // get friend details
   const {
     friend: { _id },
   } = useSelector((state: any) => state.friend);
+  console.log(_id)
   const {
     data: messages,
     isLoading: messageLoading,
     error: messageError,
-  }: any = useGetMessagesQuery(_id);
+  }: any = useGetMessagesQuery(_id,{
+    refetchOnMountOrArgChange:true,
+    refetchOnReconnect:true
+  });
 
   const dispatch = useDispatch();
 
@@ -45,7 +49,7 @@ const MessageBody = ({ scrollRef,socketRef}: Props) => {
 
   return (
     <div ref={scrollRef} className=" overflow-y-auto scrollbar-hide ">
-      <div className="px-5 py-5 h-[820px]">
+      <div ref={scrollRef} className="px-5 py-5 h-[820px]">
         {message?.messages &&
           message?.messages?.length > 0 &&
           message?.messages?.map((msg: Message) => {

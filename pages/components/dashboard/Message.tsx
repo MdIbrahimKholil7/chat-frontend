@@ -28,6 +28,7 @@ const Message = () => {
   const { name } = friend || {};
   const [activeUsers, setActiveUsers] = useState<SocketUser[] | []>([]);
   const [userSocketMsg, setUserSocketMsg] = useState<Message>();
+  const [typingMessage, setTypingMessage] = useState<Message | {}>({});
   const dispatch = useDispatch();
   let scrollNumber = 0;
   const {
@@ -37,7 +38,7 @@ const Message = () => {
     error,
     refetch,
   }: any = useGetAllUserQuery(undefined, {});
-  console.log(friend)
+  console.log(friend);
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [fetch]);
@@ -46,6 +47,10 @@ const Message = () => {
     socketRef.current = io("http://localhost:5000");
     socketRef.current.on("sendMessageToUser", (data: Message) => {
       setUserSocketMsg(data);
+    });
+    socketRef.current.on("sendTypingInputMsg", (data: Message) => {
+      setTypingMessage(data);
+      // console.log(data);
     });
   }, []);
 
@@ -62,7 +67,6 @@ const Message = () => {
   }, [auth]);
 
   useEffect(() => {
-   
     const { sender, receiverId, message } = userSocketMsg || {};
     if (receiverId === auth?.user?._id && friend?._id === sender) {
       dispatch(
@@ -75,8 +79,8 @@ const Message = () => {
         ])
       );
     }
-  }, [userSocketMsg,friend,auth?.user?._id,dispatch]);
-
+  }, [userSocketMsg, friend, auth?.user?._id, dispatch]);
+  console.log(typingMessage, "type");
   useEffect(() => {
     if (activeUsers?.length === 1) {
       setNumber(1);
@@ -105,7 +109,7 @@ const Message = () => {
   };
 
   if (isLoading) return <Loader />;
-  console.log(activeUsers)
+  console.log(activeUsers);
   return (
     <div className="bg-[#212533] h-screen text-white">
       <div className="flex h-full">
@@ -115,9 +119,7 @@ const Message = () => {
             <div className="px-3">
               <Slider {...settings}>
                 {activeUsers?.length &&
-                  activeUsers?.map((d, i) => <ActiveUser 
-                  data={d}
-                  key={i} />)}
+                  activeUsers?.map((d, i) => <ActiveUser data={d} key={i} />)}
               </Slider>
             </div>
           </div>
@@ -128,7 +130,10 @@ const Message = () => {
         <div className=" w-full h-full">
           {name ? (
             <>
-              <MessengerRightBar activeUsers={activeUsers} />
+              <MessengerRightBar
+                typingMessage={typingMessage}
+                activeUsers={activeUsers}
+              />
               <div className="max-h-[82%] overflow-y-auto scrollbar-hide">
                 <MessageBody socketRef={socketRef} scrollRef={scrollRef} />
               </div>

@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FiSend } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { useAddMessageMutation } from "../features/message/messageApi";
 import { getMessages } from "../features/message/messagesSlice";
-import { SendMessage } from "../types/types";
+import { Message, SendMessage } from "../types/types";
 
 interface Props {
   socketRef: any;
@@ -19,11 +19,19 @@ const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
 
   const { user } = useSelector((state: any) => state.auth || {});
   const { friend } = useSelector((state: any) => state || {});
-
+  const [msg, setMsg] = useState<string>("");
   // get friend details
   const {
     friend: { _id },
   } = useSelector((state: any) => state.friend);
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    socketRef.current.emit("sendTypingInput", {
+      sender: user?._id,
+      receiverId: friend?.friend?._id,
+      message: e.target.value,
+    });
+  };
 
   const handleForm = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -45,11 +53,16 @@ const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
       ])
     );
     setFetch(!fetch);
-    
+
     socketRef?.current?.emit("sendMessage", {
       receiverId: friend?.friend?._id,
       sender: user?._id,
       message: target.input.value,
+    });
+    socketRef.current.emit("sendTypingInput", {
+      sender: user?._id,
+      receiverId: friend?.friend?._id,
+      message: "",
     });
     target.input.value = "";
   };
@@ -60,6 +73,7 @@ const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
         <div className="flex gap-8 items-end h-full  px-20">
           <div className="w-full ">
             <input
+              onChange={(e) => handleInput(e)}
               name="input"
               type="text"
               placeholder="Type here"

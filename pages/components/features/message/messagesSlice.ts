@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Users } from "../../types/types";
+import { Message, Users } from "../../types/types";
 
 interface State {
-    messages: any | []
+    messages: any | [],
+    typingMessage: Message | {}
 }
 
 const initialState: State = {
     messages: [{}],
+    typingMessage: {}
 };
 
 const messagesSlice = createSlice({
@@ -14,14 +16,17 @@ const messagesSlice = createSlice({
     initialState,
     reducers: {
         getMessages: (state, action) => {
-            console.log(action.payload,'payload')
-            state.messages = [...state?.messages,...action?.payload];
+            console.log(action.payload, 'payload')
+            state.messages = [...state?.messages, ...action?.payload];
         },
         resetMessages: (state, action) => {
             state.messages = [];
         },
+        typingMessage: (state, action) => {
+            state.typingMessage = action.payload;
+        },
     },
 });
 
-export const { getMessages,resetMessages} = messagesSlice.actions;
+export const { getMessages, resetMessages, typingMessage } = messagesSlice.actions;
 export default messagesSlice.reducer;

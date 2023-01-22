@@ -1,15 +1,18 @@
 import React from "react";
-import { SocketUser } from "../types/types";
+import { Message, SocketUser } from "../types/types";
 import MessengerHead from "./MessengerHead";
 
 interface Props {
   activeUsers: SocketUser[] | [];
+  typingMessage:Message | {}
 }
 
-const MessengerRightBar = ({ activeUsers }: Props) => {
+const MessengerRightBar = ({ activeUsers,typingMessage }: Props) => {
   return (
     <div>
-      <MessengerHead activeUsers={activeUsers} />
+      <MessengerHead
+        typingMessage={typingMessage}
+      activeUsers={activeUsers} />
     </div>
   );
 };

@@ -65,7 +65,7 @@ const Register = () => {
         setFormError(loginError?.data);
       }
     }
-  }, [data, error, loginError, setCookie, loginData]);
+  }, [data, error, loginError, setCookie, loginData,router]);
 
   const handleForm = async (e: React.SyntheticEvent): Promise<any> => {
     e.preventDefault();

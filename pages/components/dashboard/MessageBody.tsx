@@ -11,10 +11,10 @@ import { getMessages } from "../features/message/messagesSlice";
 import { Message, SendMessage } from "../types/types";
 
 interface Props {
-socketRef:any,
+  socketRef: any;
   scrollRef: any;
 }
-const MessageBody = ({ scrollRef,socketRef}: Props) => {
+const MessageBody = ({ scrollRef, socketRef }: Props) => {
   const message = useSelector((state: any) => state.message);
   const user = useSelector((state: any) => state.auth);
   // console.log(message)
@@ -22,14 +22,14 @@ const MessageBody = ({ scrollRef,socketRef}: Props) => {
   const {
     friend: { _id },
   } = useSelector((state: any) => state.friend);
-  console.log(_id)
+  console.log(_id);
   const {
     data: messages,
     isLoading: messageLoading,
     error: messageError,
-  }: any = useGetMessagesQuery(_id,{
-    refetchOnMountOrArgChange:true,
-    refetchOnReconnect:true
+  }: any = useGetMessagesQuery(_id, {
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
   });
 
   const dispatch = useDispatch();
@@ -41,11 +41,8 @@ const MessageBody = ({ scrollRef,socketRef}: Props) => {
   }, [messages, dispatch]);
 
   useEffect(() => {
-    socketRef?.current?.on("sendMessage", (msg: SendMessage) => {
-   
-    });
-  }, [socketRef])
-
+    socketRef?.current?.on("sendMessage", (msg: SendMessage) => {});
+  }, [socketRef]);
 
   return (
     <div ref={scrollRef} className=" overflow-y-auto scrollbar-hide ">
@@ -54,12 +51,9 @@ const MessageBody = ({ scrollRef,socketRef}: Props) => {
           message?.messages?.length > 0 &&
           message?.messages?.map((msg: Message) => {
             return msg?.sender === user?.user?._id ? (
-              <div ref={scrollRef} className="flex justify-end my-4">
-                <div>
-                  <p className="text-end pb-2 text-gray-400 text-[12px] pr-5 ">
-                    3:10PM
-                  </p>
-                  <div className="flex px-3 items-center gap-3 justify-end">
+              <div className="chat chat-end my-7">
+                <div className="chat-image avatar">
+                  <div className="w-10 rounded-full">
                     <Image
                       width={40}
                       height={40}
@@ -67,19 +61,20 @@ const MessageBody = ({ scrollRef,socketRef}: Props) => {
                       src={userImg}
                       alt="image"
                     />
-                    <p className="bg-[#444242] px-7 py-3 rounded-full">
-                      {msg?.message}
-                    </p>
                   </div>
                 </div>
+                <div className="chat-bubble">{msg?.message}</div>
+                <div className="">
+                  <div className="chat-header justify-end">
+                    <time className="text-xs opacity-50 pt-1">12:45</time>
+                  </div>
+                </div>
+               
               </div>
             ) : (
-              <div ref={scrollRef} className="flex-start flex my-4">
-                <div>
-                  <p className="text-end pb-2 text-gray-400 text-[12px] pr-4">
-                    3:10PM
-                  </p>
-                  <div className="flex px-3 items-center gap-3 justify-start">
+              <div className="chat chat-start my-7">
+                <div className="chat-image avatar">
+                  <div className="w-10 rounded-full">
                     <Image
                       width={40}
                       height={40}
@@ -87,11 +82,15 @@ const MessageBody = ({ scrollRef,socketRef}: Props) => {
                       src={userImg}
                       alt="image"
                     />
-                    <p className="bg-[#444242] px-7 py-3 rounded-full">
-                      {msg?.message}
-                    </p>
                   </div>
                 </div>
+                <div className="">
+                  <div className="chat-bubble "> {msg?.message}</div>
+                  <div className="chat-header flex justify-end">
+                    <time className="text-xs opacity-50 pt-1">12:46</time>
+                  </div>
+                </div>
+              
               </div>
             );
           })}

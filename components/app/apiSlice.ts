@@ -4,7 +4,7 @@ import { UserForm } from '../types/types'
 // import type { Pokemon } from './types'
 
 // Define a service using a base URL and expected endpoints
-export const apiSlice = createApi({
+ const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:8080/',
@@ -20,6 +20,6 @@ export const apiSlice = createApi({
   }),
 
 })
-
+export default apiSlice
 // Export hooks for usage in function components, which are
 // auto-generated based on the defined endpoints

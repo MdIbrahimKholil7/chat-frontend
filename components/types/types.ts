@@ -29,6 +29,7 @@ export type Message = {
     sender: string,
     receiverId: string,
     message: string
+    name:string
 }
 
 export type SocketUser = {
@@ -45,7 +46,7 @@ export type SocketUser = {
 
 
 
-export type SocketUsers = {
+export  type SocketUsers = {
     socketId: string,
     userId: string,
     user: {
@@ -60,4 +61,15 @@ export type SendMessage = {
     sender: string,
     receiverId: string,
     message: string,
+}
+
+export type notification={
+    sender: string,
+    receiverId: string,
+}
+
+export type msgNotification = {
+    _id: string,
+    total: number,
+    name: string,
 }

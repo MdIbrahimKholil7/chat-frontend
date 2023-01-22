@@ -12,7 +12,7 @@ const MessengerHead = ({ activeUsers, typingMessage }: Props) => {
   const {
     friend: { name, _id },
   } = useSelector((state: any) => state?.friend);
-  console.log(typingMessage, "msg");
+ 
   return (
     <div className="border-b-[1px] border-white">
       <div className="flex items-center gap-7 py-4 px-5">

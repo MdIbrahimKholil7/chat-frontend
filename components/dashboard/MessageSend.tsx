@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { FiSend } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { useAddMessageMutation } from "../features/message/messageApi";
+import {
+  useAddMessageMutation,
+  useAddNotificationMutation,
+} from "../features/message/messageApi";
 import { getMessages } from "../features/message/messagesSlice";
-import { Message, SendMessage } from "../types/types";
+import { Message, SendMessage, SocketUser } from "../types/types";
 
 interface Props {
   socketRef: any;
   fetch: boolean;
   setFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  activeUsers: SocketUser[] | [];
 }
 
-const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
+const MessageSend = ({ setFetch, fetch, socketRef, activeUsers }: Props) => {
   const dispatch = useDispatch();
   // add message
   const [addMessage, { data, isLoading, isError, error }] =
     useAddMessageMutation();
+  const [addNotification, { data: notification, error: notificationError }] =
+    useAddNotificationMutation();
 
   const { user } = useSelector((state: any) => state.auth || {});
   const { friend } = useSelector((state: any) => state || {});
   const [msg, setMsg] = useState<string>("");
+  const [isAddNotification, setIsAddNotification] = useState<boolean>(false);
   // get friend details
   const {
     friend: { _id },
@@ -33,6 +40,12 @@ const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
     });
   };
 
+  useEffect(() => {
+    const user = activeUsers.some((u: SocketUser) => u.user._id === _id);
+    setIsAddNotification(user);
+    console.log(user);
+  }, [activeUsers, _id]);
+
   const handleForm = (e: React.SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
@@ -43,6 +56,7 @@ const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
       receiverId: _id,
       message: target.input.value,
     });
+
     dispatch(
       getMessages([
         {
@@ -54,16 +68,26 @@ const MessageSend = ({ setFetch, fetch, socketRef }: Props) => {
     );
     setFetch(!fetch);
 
+    if (!isAddNotification) {
+      addNotification({
+        sender: user?._id,
+        receiver: _id,
+      });
+    }
+
     socketRef?.current?.emit("sendMessage", {
       receiverId: friend?.friend?._id,
       sender: user?._id,
       message: target.input.value,
+      name: user?.name,
     });
+
     socketRef.current.emit("sendTypingInput", {
       sender: user?._id,
       receiverId: friend?.friend?._id,
       message: "",
     });
+
     target.input.value = "";
   };
 

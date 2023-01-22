@@ -1,4 +1,4 @@
-import { apiSlice } from "../../app/apiSlice";
+import  apiSlice  from "../../app/apiSlice";
 import { UserForm } from "../../types/types";
 // import { userLoggedIn } from "./authSlice";
 import { useCookies } from 'react-cookie';
@@ -18,6 +18,7 @@ export const friendsSlice = apiSlice.injectEndpoints({
         }),
     })
 })
+
 
 export const { useGetUserQuery } = friendsSlice
 

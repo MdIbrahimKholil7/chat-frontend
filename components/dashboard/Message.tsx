@@ -14,7 +14,11 @@ import { useGetAllUserQuery } from "../features/auth/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import MessageSend from "./MessageSend";
 import { Message, SendMessage, SocketUser } from "../types/types";
-import { getMessages } from "../features/message/messagesSlice";
+import {
+  getMessages,
+  notificationMessage,
+} from "../features/message/messagesSlice";
+import { useAddNotificationMutation } from "../features/message/messageApi";
 
 const { io } = require("socket.io-client");
 
@@ -24,13 +28,17 @@ const Message = () => {
   const [number, setNumber] = useState<number>(0);
   const [fetch, setFetch] = useState(false);
   const { friend } = useSelector((state: any) => state?.friend);
-  const { auth } = useSelector((state: any) => state);
+  const {
+    auth,
+    message: { notificationMsg },
+  } = useSelector((state: any) => state);
   const { name } = friend || {};
   const [activeUsers, setActiveUsers] = useState<SocketUser[] | []>([]);
   const [userSocketMsg, setUserSocketMsg] = useState<Message>();
   const [typingMessage, setTypingMessage] = useState<Message | {}>({});
   const dispatch = useDispatch();
-  let scrollNumber = 0;
+  const [addNotification, { data: notification, error: notificationError }] =
+    useAddNotificationMutation();
   const {
     data: allUser,
     isLoading,
@@ -38,7 +46,7 @@ const Message = () => {
     error,
     refetch,
   }: any = useGetAllUserQuery(undefined, {});
-  console.log(friend);
+
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [fetch]);
@@ -50,7 +58,6 @@ const Message = () => {
     });
     socketRef.current.on("sendTypingInputMsg", (data: Message) => {
       setTypingMessage(data);
-      // console.log(data);
     });
   }, []);
 
@@ -61,11 +68,11 @@ const Message = () => {
   useEffect(() => {
     socketRef.current.on("getUser", (user: SocketUser[]) => {
       const uArr = user.filter((u: SocketUser) => u.userId !== auth?.user?._id);
-
       setActiveUsers(uArr);
     });
   }, [auth]);
 
+  // adding socket message
   useEffect(() => {
     const { sender, receiverId, message } = userSocketMsg || {};
     if (receiverId === auth?.user?._id && friend?._id === sender) {
@@ -80,7 +87,29 @@ const Message = () => {
       );
     }
   }, [userSocketMsg, friend, auth?.user?._id, dispatch]);
-  console.log(typingMessage, "type");
+
+  // adding notification
+  useEffect(() => {
+    const { sender, receiverId, message,name } = userSocketMsg || {};
+    console.log('hell',userSocketMsg)
+    if (receiverId === auth?.user?._id && friend?._id !== sender) {
+      console.log('hello',userSocketMsg)
+      dispatch(
+        notificationMessage({
+          _id:sender,
+          receiver:receiverId,
+          name,
+          total:1
+        })
+      );
+      addNotification({
+        sender,
+        receiver:receiverId,
+      });
+    }
+  }, [userSocketMsg, friend, auth?.user?._id, dispatch, addNotification]);
+
+  // console.log(userSocketMsg, "socketMesage");
   useEffect(() => {
     if (activeUsers?.length === 1) {
       setNumber(1);
@@ -109,7 +138,7 @@ const Message = () => {
   };
 
   if (isLoading) return <Loader />;
-  console.log(activeUsers);
+
   return (
     <div className="bg-[#212533] h-screen text-white">
       <div className="flex h-full">
@@ -142,6 +171,7 @@ const Message = () => {
                   socketRef={socketRef}
                   setFetch={setFetch}
                   fetch={fetch}
+                  activeUsers={activeUsers}
                 />
               </div>
             </>

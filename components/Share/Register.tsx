@@ -43,7 +43,7 @@ const Register = () => {
         message: "",
       });
       setCookie("chatUser", { data });
-      router.push("/components/dashboard/MessageHome");
+      router.push("/Home");
     }
     if (loginData) {
       setFormError({
@@ -52,7 +52,7 @@ const Register = () => {
       // console.log(loginData);
 
       setCookie("chatUser", { data: loginData } /* { path: '/dashboard' } */);
-      router.push("/components/dashboard/MessageHome");
+      router.push("/Home");
     }
 
     if (error) {

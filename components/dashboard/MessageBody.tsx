@@ -18,7 +18,7 @@ interface Props {
 const MessageBody = ({ scrollRef, socketRef }: Props) => {
   const message = useSelector((state: any) => state.message);
   const user = useSelector((state: any) => state.auth);
- 
+
   const {
     friend: { _id },
   } = useSelector((state: any) => state.friend);
@@ -49,11 +49,9 @@ const MessageBody = ({ scrollRef, socketRef }: Props) => {
       <div ref={scrollRef} className="px-5 py-5 h-[820px]">
         {message?.messages &&
           message?.messages?.length > 0 &&
-          message?.messages?.map((msg: Message,i:number) => {
+          message?.messages?.map((msg: Message, i: number) => {
             return msg?.sender === user?.user?._id ? (
-              <div  
-              key={i}
-              ref={scrollRef} className="chat chat-end my-7">
+              <div key={i} ref={scrollRef} className="chat chat-end my-7">
                 <div className="chat-image avatar">
                   <div className="w-10 rounded-full">
                     <Image

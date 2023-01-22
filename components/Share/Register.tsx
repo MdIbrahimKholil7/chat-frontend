@@ -27,7 +27,7 @@ const Register = () => {
     { data: loginData, isLoading: loginLoading, error: loginError },
   ]: any = useLoginUserMutation();
   const auth = useSelector((state: any) => state.auth);
- 
+
   const [formData, setFormData] = useState<Form>({
     name: "",
     email: "",
@@ -65,7 +65,7 @@ const Register = () => {
         setFormError(loginError?.data);
       }
     }
-  }, [data, error, loginError, setCookie, loginData,router]);
+  }, [data, error, loginError, setCookie, loginData, router]);
 
   const handleForm = async (e: React.SyntheticEvent): Promise<any> => {
     e.preventDefault();

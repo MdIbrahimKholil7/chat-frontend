@@ -4,15 +4,13 @@ import MessengerHead from "./MessengerHead";
 
 interface Props {
   activeUsers: SocketUser[] | [];
-  typingMessage:Message | {}
+  typingMessage: Message | {};
 }
 
-const MessengerRightBar = ({ activeUsers,typingMessage }: Props) => {
+const MessengerRightBar = ({ activeUsers, typingMessage }: Props) => {
   return (
     <div>
-      <MessengerHead
-        typingMessage={typingMessage}
-      activeUsers={activeUsers} />
+      <MessengerHead typingMessage={typingMessage} activeUsers={activeUsers} />
     </div>
   );
 };

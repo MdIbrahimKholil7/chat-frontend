@@ -90,21 +90,21 @@ const Message = () => {
 
   // adding notification
   useEffect(() => {
-    const { sender, receiverId, message,name } = userSocketMsg || {};
-    console.log('hell',userSocketMsg)
+    const { sender, receiverId, message, name } = userSocketMsg || {};
+    console.log("hell", userSocketMsg);
     if (receiverId === auth?.user?._id && friend?._id !== sender) {
-      console.log('hello',userSocketMsg)
+      console.log("hello", userSocketMsg);
       dispatch(
         notificationMessage({
-          _id:sender,
-          receiver:receiverId,
+          _id: sender,
+          receiver: receiverId,
           name,
-          total:1
+          total: 1,
         })
       );
       addNotification({
         sender,
-        receiver:receiverId,
+        receiver: receiverId,
       });
     }
   }, [userSocketMsg, friend, auth?.user?._id, dispatch, addNotification]);

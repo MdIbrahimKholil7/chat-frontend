@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { FiSend } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,15 +8,33 @@ import {
 import userImg from "../assets/user.png";
 import Image from "next/image";
 import { getMessages } from "../features/message/messagesSlice";
-import { Message, SendMessage } from "../types/types";
+import { Message, SendMessage, SocketUser } from "../types/types";
 // import { v4 as uuidv4 } from 'uuid';
+import moment from "moment";
+import VideoModal from "../utils/VideoModal";
+import { SocketContext } from "../utils/ContextProvider";
 
 interface Props {
   socketRef: any;
   scrollRef: any;
+  activeUsers: SocketUser[] | [];
 }
-const MessageBody = ({ scrollRef, socketRef }: Props) => {
-  const message = useSelector((state: any) => state.message);
+const MessageBody = ({ scrollRef, socketRef, activeUsers }: Props) => {
+  const {
+    name,
+    callAccepted,
+    myVideo,
+    userVideo,
+    callEnded,
+    stream,
+    call,
+    callUser,
+    leaveCall,
+    answerCall,
+    me,
+  } = useContext(SocketContext);
+
+  const { message, activeUser } = useSelector((state: any) => state);
   const user = useSelector((state: any) => state.auth);
 
   const {
@@ -66,7 +84,9 @@ const MessageBody = ({ scrollRef, socketRef }: Props) => {
                 <div className="chat-bubble">{msg?.message}</div>
                 <div className="">
                   <div className="chat-header justify-end">
-                    <time className="text-xs opacity-50 pt-1">12:45</time>
+                    <time className="text-xs opacity-50 pt-1">
+                      {moment(msg?.createdAt).fromNow()}
+                    </time>
                   </div>
                 </div>
               </div>
@@ -86,13 +106,19 @@ const MessageBody = ({ scrollRef, socketRef }: Props) => {
                 <div className="">
                   <div className="chat-bubble "> {msg?.message}</div>
                   <div className="chat-header flex justify-end">
-                    <time className="text-xs opacity-50 pt-1">12:46</time>
+                    <time className="text-xs opacity-50 pt-1">
+                      {moment(msg?.createdAt).fromNow()}
+                    </time>
                   </div>
                 </div>
               </div>
             );
           })}
       </div>
+      {/* {(activeUser?.callUser ||
+        call.isReceivingCall ||
+        callAccepted ||
+        !callEnded) && <VideoModal activeUsers={activeUsers} />} */}
     </div>
   );
 };

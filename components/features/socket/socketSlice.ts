@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: any = {
-    activeUsers: []
+    activeUsers: [],
+    callUser:false,
+    resetCall:false
 }
 
 const socketSlice = createSlice({
@@ -11,9 +13,15 @@ const socketSlice = createSlice({
         addActiveUsers: (state, action) => {
             state.activeUsers = action.payload
         },
+        addCallUser:(state,action)=>{
+            state.callUser=action.payload
+        },
+        resetCallUser:(state,action)=>{
+            state.resetCall=action.payload
+        }
     },
 });
 
-export const { addActiveUsers } = socketSlice.actions;
+export const { addActiveUsers,resetCallUser,addCallUser } = socketSlice.actions;
 export default socketSlice.reducer;
 

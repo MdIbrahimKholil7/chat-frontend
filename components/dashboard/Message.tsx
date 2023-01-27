@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import ActiveUser from "./ActiveUser";
 import MessageLeftBar from "./MessageLeftBar";
 // Import css files
@@ -19,15 +19,26 @@ import {
   notificationMessage,
 } from "../features/message/messagesSlice";
 import { useAddNotificationMutation } from "../features/message/messageApi";
+import VideoModal from "../utils/VideoModal";
+import { SocketContext } from "../utils/ContextProvider";
 
 const { io } = require("socket.io-client");
 
 const Message = () => {
+  const { callAccepted, callEnded, stream, callUser, call } =
+    useContext(SocketContext);
+  console.log(callAccepted);
+  // console.log(callerId)
+  console.log(call.isReceivingCall,call, stream);
   const scrollRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<any>();
   const [number, setNumber] = useState<number>(0);
   const [fetch, setFetch] = useState(false);
-  const { friend } = useSelector((state: any) => state?.friend);
+  const [ownSocketId, setOwnSocketId] = useState<string | undefined>("");
+  const {
+    friend: { friend },
+    activeUser,
+  } = useSelector((state: any) => state);
   const {
     auth,
     message: { notificationMsg },
@@ -53,6 +64,7 @@ const Message = () => {
 
   useEffect(() => {
     socketRef.current = io("http://localhost:5000");
+    // dispatch(addSocket(socketRef))
     socketRef.current.on("sendMessageToUser", (data: Message) => {
       setUserSocketMsg(data);
     });
@@ -67,6 +79,11 @@ const Message = () => {
 
   useEffect(() => {
     socketRef.current.on("getUser", (user: SocketUser[]) => {
+      const findArr = user.find(
+        (u: SocketUser) => u.userId === auth?.user?._id
+      );
+      setOwnSocketId(findArr?.socketId);
+      console.log("findArr", findArr);
       const uArr = user.filter((u: SocketUser) => u.userId !== auth?.user?._id);
       setActiveUsers(uArr);
     });
@@ -164,7 +181,11 @@ const Message = () => {
                 activeUsers={activeUsers}
               />
               <div className="max-h-[82%] overflow-y-auto scrollbar-hide">
-                <MessageBody socketRef={socketRef} scrollRef={scrollRef} />
+                <MessageBody
+                  activeUsers={activeUsers}
+                  socketRef={socketRef}
+                  scrollRef={scrollRef}
+                />
               </div>
               <div className="mt-5">
                 <MessageSend
@@ -184,6 +205,9 @@ const Message = () => {
           )}
         </div>
       </div>
+      {activeUser?.callUser && (
+        <VideoModal ownSocketId={ownSocketId} activeUsers={activeUsers} />
+      )}
     </div>
   );
 };

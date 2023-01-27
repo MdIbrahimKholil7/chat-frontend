@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import Load from "../assets/Ripple-1s-200px.gif"
+import Load from "../assets/Ripple-1s-200px.gif";
 
 const Loader = () => {
   return (

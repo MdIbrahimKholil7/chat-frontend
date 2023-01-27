@@ -67,7 +67,7 @@ const messagesSlice = createSlice({
     },
 });
 
-export const { getMessages, resetMessages, typingMessage, notificationMessage, addNotificationFromDb,resetAllNotificationFromDb } = messagesSlice.actions;
+export const { getMessages, resetMessages, typingMessage, notificationMessage, addNotificationFromDb, resetAllNotificationFromDb } = messagesSlice.actions;
 export default messagesSlice.reducer;
 
 

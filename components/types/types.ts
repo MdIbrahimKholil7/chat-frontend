@@ -8,9 +8,18 @@ export type UserForm = {
 
 export type Users = {
 
-    name: string,
-    email: string,
-    _id: string
+    friendInfo: {
+        name: string,
+        email: string,
+        _id: string,
+        updatedAt?:string
+    },
+    lastMsg:{
+        message: string,
+        sender:string,
+        receiver:string,
+        updatedAt:string
+    }
 }
 
 export type Friend = {
@@ -29,7 +38,8 @@ export type Message = {
     sender: string,
     receiverId: string,
     message: string
-    name:string
+    name: string,
+    createdAt: string
 }
 
 export type SocketUser = {
@@ -46,7 +56,7 @@ export type SocketUser = {
 
 
 
-export  type SocketUsers = {
+export type SocketUsers = {
     socketId: string,
     userId: string,
     user: {
@@ -63,7 +73,7 @@ export type SendMessage = {
     message: string,
 }
 
-export type notification={
+export type notification = {
     sender: string,
     receiverId: string,
 }
@@ -73,3 +83,15 @@ export type msgNotification = {
     total: number,
     name: string,
 }
+
+// add friend type 
+export type friend={
+    createdAt?:string,
+    email:string,
+    name:string,
+    __v?:string,
+    _id:string,
+    updatedAt?: string | undefined
+}
+
+

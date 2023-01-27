@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 // import { jokeApi } from './app/apiSlice'
 import { setupListeners } from '@rtk-incubator/rtk-query'
-import  apiSlice  from '../app/apiSlice'
+import apiSlice from '../app/apiSlice'
 import authSliceReducer from '../features/auth/authSlice'
 import friendSliceReducer from '../features/friend/friendSlice'
 import messagesSliceReducer from '../features/message/messagesSlice'
@@ -9,7 +9,7 @@ import socketSliceReducer from '../features/socket/socketSlice'
 
 // import { jokeApi } from './services/jokes'
 
- const store = configureStore({
+const store = configureStore({
     reducer: {
 
         [apiSlice.reducerPath]: apiSlice.reducer,
@@ -20,7 +20,7 @@ import socketSliceReducer from '../features/socket/socketSlice'
     },
 
     devTools: process.env.NODE_ENV !== "production",
-    
+
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
             serializableCheck: false,

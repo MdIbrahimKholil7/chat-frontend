@@ -24,3 +24,6 @@ a {
 .slick-slide{
   width: 81px !important;
 }
+.modal{
+  background: none !important;
+}

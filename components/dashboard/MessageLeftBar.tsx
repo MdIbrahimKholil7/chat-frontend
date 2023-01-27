@@ -16,6 +16,7 @@ import {
 } from "../features/message/messagesSlice";
 import { msgNotification, Users } from "../types/types";
 import OutsideClickHandler from "react-outside-click-handler";
+import moment from "moment";
 
 const MessageLeftBar = ({ data }: any) => {
   const [cookies, removeCookie]: any = useCookies(["chatUser"]);
@@ -92,9 +93,11 @@ const MessageLeftBar = ({ data }: any) => {
                   tabIndex={0}
                   className="mb-3 relative"
                 >
-                  <p className="absolute bg-red-500 text-white p-1 rounded-full top-[-10px] right-[9px] w-[25px] h-[25px] flex justify-center items-center cursor-pointer">
-                    {totalNotifications}
-                  </p>
+                  {totalNotifications > 0 && (
+                    <p className="absolute bg-red-500 text-white p-1 rounded-full top-[-10px] right-[9px] w-[25px] h-[25px] flex justify-center items-center cursor-pointer">
+                      {totalNotifications}
+                    </p>
+                  )}
                   <MdNotificationsNone className="text-4xl text-white font-bold cursor-pointer" />
                 </label>
                 <ul

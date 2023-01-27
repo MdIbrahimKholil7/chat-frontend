@@ -80,6 +80,7 @@ const MessageSend = ({ setFetch, fetch, socketRef, activeUsers }: Props) => {
       sender: user?._id,
       message: target.input.value,
       name: user?.name,
+      createdAt: new Date().getTime()
     });
 
     socketRef.current.emit("sendTypingInput", {

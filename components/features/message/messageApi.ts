@@ -10,8 +10,8 @@ interface FetchArgs extends RequestInit {
     body?: any;
     responseHandler?: 'json' | 'text' | ((response: Response) => Promise<any>);
     validateStatus?: (response: Response, body: any) => boolean;
-    result?:any
-    totalNotification?:number
+    result?: any
+    totalNotification?: number
 }
 
 export const messageSlice = apiSlice.injectEndpoints({
@@ -44,10 +44,10 @@ export const messageSlice = apiSlice.injectEndpoints({
         getNotification: builder.query<FetchArgs, void>({
             query: (id) => `/api/v1/notification/${id}`,
         }),
-        resetNotifications:builder.query<FetchArgs, void>({
+        resetNotifications: builder.query<FetchArgs, void>({
             query: (id) => `/api/v1/notification/update/${id}`,
         })
     })
 })
 
-export const { useAddMessageMutation, useGetMessagesQuery, useAddNotificationMutation, useGetNotificationQuery,useResetNotificationsQuery } = messageSlice
+export const { useAddMessageMutation, useGetMessagesQuery, useAddNotificationMutation, useGetNotificationQuery, useResetNotificationsQuery } = messageSlice

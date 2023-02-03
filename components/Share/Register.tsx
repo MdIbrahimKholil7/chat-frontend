@@ -189,7 +189,8 @@ const Register = () => {
                   />
                 </div>
               )}
-              {(error || loginError) && <Error message={formError?.message} />}
+              {(loginError && !show) && <Error message={formError?.message} />}
+              {(error && show) && <Error message={formError?.message} />}
 
               {!show && (
                 <div className="form-control mt-6">
@@ -198,7 +199,7 @@ const Register = () => {
                     type="submit"
                     name="loginBtn"
                     className="btn btn-primary"
-                    value="Login"
+                    value={loginLoading ? 'Please Wait...':'Login'}
                   />
                 </div>
               )}
@@ -208,7 +209,7 @@ const Register = () => {
                     type="submit"
                     name="submitBtn"
                     className="btn btn-primary"
-                    value="Sign Up"
+                    value={isLoading ? 'Please Wait...':'Sign Up'}
                     disabled={isLoading}
                   />
                 </div>

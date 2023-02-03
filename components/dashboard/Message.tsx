@@ -67,7 +67,7 @@ const Message = () => {
   }, [message?.messages]);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:5000");
+    socketRef.current = io("https://socket-server-8m58.onrender.com");
 
     socketRef.current.on("sendMessageToUser", (data: Message) => {
       console.log("data", data);
@@ -176,7 +176,7 @@ const Message = () => {
               </Slider>
             </div>
           </div>
-          <div className="mt-14 overflow-y-auto max-h-[61%] 2xl:max-h-[66%] scrollbar-hide overflow-hidden px-3">
+          <div className="mt-4 overflow-y-auto lg:max-h-[50%] xl:max-h-[58%%] 2xl:max-h-[66%] scrollbar-hide overflow-hidden px-3 bg-red-500">
             <AllUsers users={users?.users} />
           </div>
         </div>
@@ -187,7 +187,7 @@ const Message = () => {
             }}
           >
             <div
-              className={`w-[330px] block md:hidden border-r-2 max-h-[90vh] pt-5 absolute top-0 ${
+              className={`w-[330px] block h-full md:hidden border-r-2 pt-5 absolute top-0 ${
                 openMenu ? "left-0" : "left-[-500px]"
               }  bg-[#2d303a] duration-300 z-50`}
             >
@@ -202,7 +202,7 @@ const Message = () => {
                   </Slider>
                 </div>
               </div>
-              <div className="mt-14 overflow-y-auto max-h-[60%] scrollbar-hide overflow-hidden px-3">
+              <div className="mt-14 overflow-y-auto max-h-[53%] overflow-hidden px-3 scrollbar-hide">
                 <AllUsers users={users?.users} />
               </div>
             </div>

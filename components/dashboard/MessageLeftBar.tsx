@@ -186,7 +186,7 @@ const MessageLeftBar = ({ data }: any) => {
           value={value}
         />
         {value && (
-          <div className="w-full bg-[#545556] p-2">
+          <div className="w-full bg-[#545556] p-2 absolute top-6 left-0  h-auto z-[1200]">
             {data?.result
               ?.filter((data: Users) => {
                 return (

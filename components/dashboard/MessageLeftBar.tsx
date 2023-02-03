@@ -25,7 +25,7 @@ import { openProfileModal } from "../features/menuBar/menuSlice";
 
 const MessageLeftBar = ({ data }: any) => {
   const [cookies, removeCookie]: any = useCookies(["chatUser"]);
-  const { name, _id,img} = cookies?.chatUser?.data?.result || {};
+  const { name, _id, img } = cookies?.chatUser?.data?.result || {};
   const [notification, setNotification] = useState<boolean>(false);
   const [outSide, setOutSide] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
@@ -48,10 +48,10 @@ const MessageLeftBar = ({ data }: any) => {
 
   const dispatch = useDispatch();
   const { notificationMsg, totalNotifications } = useSelector(
-    (state: any) => state.message||{}
+    (state: any) => state.message || {}
   );
-  const { img:authImg } = useSelector(
-    (state: any) => state.auth ||{}
+  const { img: authImg, name: authName } = useSelector(
+    (state: any) => state.auth || {}
   );
 
   useEffect(() => {
@@ -74,21 +74,20 @@ const MessageLeftBar = ({ data }: any) => {
   };
 
   const handleAddFriend = (user: friend): void => {
-    
     dispatch(addFriend(user));
     dispatch(userLoggedIn(cookies?.chatUser));
     if (user?._id !== _id) {
       dispatch(resetMessages([]));
     }
   };
-  
+
   return (
     <div>
       <div className="flex justify-between items-center px-3 w-full">
         <div className="flex items-center gap-3">
           <div className="relative w-[50px] h-[50px] cursor-pointer">
             <Image
-              src={(img||authImg)?(img||authImg):userImg}
+              src={img || authImg ? img || authImg : userImg}
               alt="userImg"
               className="rounded-full w-full h-full object-cover"
               width={50}
@@ -96,7 +95,7 @@ const MessageLeftBar = ({ data }: any) => {
             />
             <div className="w-[10px] h-[10px] bg-green-500 rounded-full absolute top-[3px] right-[3px]"></div>
           </div>
-          <p>{name}</p>
+          <p>{authName ? authName : name}</p>
         </div>
         <div className="flex items-center gap-4">
           {/* <p>

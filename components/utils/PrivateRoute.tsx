@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { useGetUserInformationQuery } from "../features/auth/authApi";
-import { addImg, userLoggedIn } from "../features/auth/authSlice";
+import { addImg, addName, userLoggedIn } from "../features/auth/authSlice";
 import Loader from "./Loader";
 type Props = {
   children?: React.ReactNode | JSX.Element | JSX.Element[] | any;
@@ -26,10 +26,11 @@ const PrivateRoute = ({ children }: Props) => {
 
   useEffect((): any => {
     if (cookies?.chatUser?.data?.token) {
-      console.log('data',data)
+   
       if (data) {
         cookies.chatUser.data.result = data?.result;
         dispatch(addImg(data.result?.img))
+        dispatch(addName(data.result?.name))
       }
       if (isError) {
         removeCookie("chatUser" /* {path:'/dashboard'} */);

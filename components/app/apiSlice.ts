@@ -7,7 +7,7 @@ import { UserForm } from '../types/types'
  const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8080/',
+    baseUrl: 'https://chat-backend-ehpd.onrender.com/',
     prepareHeaders: async (headers, { getState, endpoint }: any) => {
       const token = getState()?.auth?.accessToken;
      

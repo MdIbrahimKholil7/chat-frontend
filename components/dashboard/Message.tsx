@@ -162,10 +162,10 @@ const Message = () => {
   };
 
   if (isLoading) return <Loader />;
-  console.log(activeUsers)
+
   return (
     <div className="bg-[#212533] h-screen text-white relative">
-      <div className="flex h-full">
+      <div className="flex h-full md:h-full">
         <div className="xl:w-[400px] 2xl:w-[480px] hidden md:block border-r-2 border-white max-h-screen pt-5">
           <MessageLeftBar data={allUser} />
           <div className="cursor-pointer border-b-[1px] border-white pb-9 ">
@@ -176,7 +176,7 @@ const Message = () => {
               </Slider>
             </div>
           </div>
-          <div className="mt-14 overflow-y-auto max-h-[66%] scrollbar-hide overflow-hidden px-3">
+          <div className="mt-14 overflow-y-auto max-h-[61%] 2xl:max-h-[66%] scrollbar-hide overflow-hidden px-3">
             <AllUsers users={users?.users} />
           </div>
         </div>
@@ -187,9 +187,9 @@ const Message = () => {
             }}
           >
             <div
-              className={`w-[330px] block md:hidden border-r-2 max-h-screen pt-5 absolute top-0 ${
+              className={`w-[330px] block md:hidden border-r-2 max-h-[90vh] pt-5 absolute top-0 ${
                 openMenu ? "left-0" : "left-[-500px]"
-              } h-full bg-[#2d303a] duration-300 z-50`}
+              }  bg-[#2d303a] duration-300 z-50`}
             >
               <MessageLeftBar data={allUser} />
               <div className="cursor-pointer border-b-[1px] border-white pb-9 ">
@@ -202,7 +202,7 @@ const Message = () => {
                   </Slider>
                 </div>
               </div>
-              <div className="mt-14 overflow-y-auto max-h-[66%] scrollbar-hide overflow-hidden px-3">
+              <div className="mt-14 overflow-y-auto max-h-[60%] scrollbar-hide overflow-hidden px-3">
                 <AllUsers users={users?.users} />
               </div>
             </div>

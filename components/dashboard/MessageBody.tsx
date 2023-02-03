@@ -11,7 +11,6 @@ import { getMessages } from "../features/message/messagesSlice";
 import { Message, SendMessage, SocketUser } from "../types/types";
 // import { v4 as uuidv4 } from 'uuid';
 import moment from "moment";
-import VideoModal from "../utils/VideoModal";
 import { SocketContext } from "../utils/ContextProvider";
 
 interface Props {
@@ -20,20 +19,7 @@ interface Props {
   activeUsers: SocketUser[] | [];
 }
 const MessageBody = ({ scrollRef, socketRef, activeUsers }: Props) => {
-  const {
-    name,
-    callAccepted,
-    myVideo,
-    userVideo,
-    callEnded,
-    stream,
-    call,
-    callUser,
-    leaveCall,
-    answerCall,
-    me,
-  } = useContext(SocketContext);
-
+ 
   const { message, activeUser } = useSelector((state: any) => state);
   const user = useSelector((state: any) => state.auth);
 
@@ -43,7 +29,7 @@ const MessageBody = ({ scrollRef, socketRef, activeUsers }: Props) => {
 
   const {
     data: messages,
-    isLoading: messageLoading,
+    isLoading,
     error: messageError,
   }: any = useGetMessagesQuery(_id, {
     refetchOnMountOrArgChange: true,
@@ -64,11 +50,16 @@ const MessageBody = ({ scrollRef, socketRef, activeUsers }: Props) => {
 
   return (
     <>
-      {message?.messages.length === 0 && (
+      {!message?.messages.length && !isLoading &&(
         <div className="text-center py-5 h-[80vh]  text-white font-bold">
           <p className="text-[14px]">No message created yet</p>
         </div>
       )}
+      {
+        isLoading && <div className="text-center py-5 h-[80vh]">
+          <p>Please wait....</p>
+        </div>
+      }
       {message?.messages.length > 0 && (
         <div  className=" overflow-y-auto scrollbar-hide ">
           <div  className="px-5 py-5 h-[82vh] 2xl:h-[84vh]">

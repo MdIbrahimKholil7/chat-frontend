@@ -1,31 +1,33 @@
 import Image from "next/image";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import userImg from "../assets/user.png";
 import { useUpdateUserDataMutation } from "../features/auth/authApi";
-import { addImg, userLoggedIn } from "../features/auth/authSlice";
-interface Props {
-  userDetails: any;
-}
-interface HTMLInputEvent extends Event {
-  target: HTMLInputElement & EventTarget;
-}
+import { addImg, addName, userLoggedIn } from "../features/auth/authSlice";
+import { openProfileModal } from "../features/menuBar/menuSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProfileModal = () => {
   const {
     menu: { openModal },
+    auth: { name },
   } = useSelector((state: any) => state);
-  //   console.log(openModal);
-  const { name } = openModal || {};
+
   const [nameInput, setNameInput] = useState<string>(name);
+  const { img: authImg, name: authName } = useSelector(
+    (state: any) => state.auth || {}
+  );
+ 
   const [img, setImg] = useState<string | any>(
-    "http://res.cloudinary.com/deliy4nnm/image/upload/v1675268912/chat_images/d1ctsip7grmqcsakdmf2.jpg"
+    authImg
+      ? authImg
+      : "http://res.cloudinary.com/deliy4nnm/image/upload/v1675268912/chat_images/d1ctsip7grmqcsakdmf2.jpg"
   );
   const [updateUserData, { data, isLoading, error }] =
     useUpdateUserDataMutation();
   const [cookies, removeCookie]: any = useCookies(["chatUser"]);
-  const image = cookies?.chatUser?.data?.result;
   const dispatch = useDispatch();
 
   const onImageChange = (
@@ -49,7 +51,6 @@ const ProfileModal = () => {
           setImg(data.url);
         });
     }
-    // setImg(files)
   };
 
   const handleForm = (e: React.SyntheticEvent) => {
@@ -59,15 +60,26 @@ const ProfileModal = () => {
       name: nameInput,
       img,
     });
-    dispatch(addImg(img))
+
+    dispatch(addImg(img));
+    dispatch(addName(nameInput));
+    dispatch(openProfileModal(null));
+  
   };
-//   console.log(cookies?.chatUser?.data?.result)
+
   return (
     <div>
       <input type="checkbox" id="my-modal-6" className="modal-toggle" />
-      <div className="modal modal-bottom sm:modal-middle z-[999]">
-        <div className="z-[999] bg-slate-600 p-4 rounded-md">
+      <div className="modal modal-bottom sm:modal-middle z-[999] ">
+        <div className="z-[999] bg-slate-600 p-4 rounded-md relative">
           <h3 className="font-bold text-lg text-center">Update Your Profile</h3>
+          <label
+            onClick={() => dispatch(openProfileModal(null))}
+            htmlFor="my-modal-6"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
           <div className="card flex-shrink-0 w-[600px] shadow-2xl bg-base-100 mt-10">
             <form onSubmit={handleForm} className="card-body">
               <div className="form-control">
@@ -113,14 +125,15 @@ const ProfileModal = () => {
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Update</button>
               </div>
+              {error && (
+                <p className="text-center my-5 text-red-500 ">
+                  Internal Server Error
+                </p>
+              )}
             </form>
           </div>
-          <div className="modal-action">
-            <label htmlFor="my-modal-6" className="btn">
-              Yay!
-            </label>
-          </div>
         </div>
+        <ToastContainer />
       </div>
     </div>
   );

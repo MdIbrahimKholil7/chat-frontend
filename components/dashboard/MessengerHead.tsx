@@ -5,21 +5,28 @@ import ActiveUser from "./ActiveUser";
 import MessengerHeadActiveUser from "./MessengerHeadActiveUser";
 import { BsFillCameraVideoFill } from "react-icons/bs";
 import { addCallUser } from "../features/socket/socketSlice";
+import { openMenuFn } from "../features/menuBar/menuSlice";
+import { GiHamburgerMenu } from "react-icons/gi";
 interface Props {
   activeUsers: SocketUser[] | [];
   typingMessage: Message | {} | any;
 }
 const MessengerHead = ({ activeUsers, typingMessage }: Props) => {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const {
     friend: { name, _id },
   } = useSelector((state: any) => state?.friend);
-  const handleCall=()=>{
-    dispatch(addCallUser(true))
-  }
+
   return (
     <div className="border-b-[1px] border-white flex items-center justify-between">
-      <div className="flex items-center gap-7 py-4 px-5">
+      <div className="flex items-center gap-7 py-4 px-1 md:px-5">
+        <span
+          onClick={() => dispatch(openMenuFn({}))}
+          className="pb-2 px-3 cursor-pointer pt-3 block md:hidden"
+        >
+          <GiHamburgerMenu className="text-2xl text-white " />
+        </span>
+
         <MessengerHeadActiveUser activeUsers={activeUsers} />
         <>
           <div>
@@ -29,11 +36,6 @@ const MessengerHead = ({ activeUsers, typingMessage }: Props) => {
             )}
           </div>
         </>
-      </div>
-      <div>
-        <label htmlFor="my-modal-5" className="">
-          <BsFillCameraVideoFill onClick={handleCall} className="text-3xl mr-5 cursor-pointer" />
-        </label>
       </div>
     </div>
   );

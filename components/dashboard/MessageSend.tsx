@@ -6,6 +6,10 @@ import {
   useAddNotificationMutation,
 } from "../features/message/messageApi";
 import { getMessages } from "../features/message/messagesSlice";
+import {
+  updateSenderMessage,
+  updateUsersMessage,
+} from "../features/users/usersSlice";
 import { Message, SendMessage, SocketUser } from "../types/types";
 
 interface Props {
@@ -43,7 +47,7 @@ const MessageSend = ({ setFetch, fetch, socketRef, activeUsers }: Props) => {
   useEffect(() => {
     const user = activeUsers.some((u: SocketUser) => u.user._id === _id);
     setIsAddNotification(user);
-    console.log(user);
+ 
   }, [activeUsers, _id]);
 
   const handleForm = (e: React.SyntheticEvent) => {
@@ -75,12 +79,19 @@ const MessageSend = ({ setFetch, fetch, socketRef, activeUsers }: Props) => {
       });
     }
 
+    // dispatch(
+    //   updateSenderMessage({
+    //     receiver: friend?.friend?._id,
+    //     message: target.input.value,
+    //   })
+    // );
+    
     socketRef?.current?.emit("sendMessage", {
       receiverId: friend?.friend?._id,
       sender: user?._id,
       message: target.input.value,
       name: user?.name,
-      createdAt: new Date().getTime()
+      createdAt: new Date().getTime(),
     });
 
     socketRef.current.emit("sendTypingInput", {
@@ -95,7 +106,7 @@ const MessageSend = ({ setFetch, fetch, socketRef, activeUsers }: Props) => {
   return (
     <div>
       <form className="w-full" onSubmit={handleForm}>
-        <div className="flex gap-8 items-end h-full  px-20">
+        <div className="flex gap-4 md:gap-8 items-end h-full px-2 md:px-20">
           <div className="w-full ">
             <input
               onChange={(e) => handleInput(e)}

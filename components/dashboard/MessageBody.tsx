@@ -63,63 +63,68 @@ const MessageBody = ({ scrollRef, socketRef, activeUsers }: Props) => {
   }, [socketRef]);
 
   return (
-    <div ref={scrollRef} className=" overflow-y-auto scrollbar-hide ">
-      <div ref={scrollRef} className="px-5 py-5 h-[820px]">
-        {message?.messages &&
-          message?.messages?.length > 0 &&
-          message?.messages?.map((msg: Message, i: number) => {
-            return msg?.sender === user?.user?._id ? (
-              <div key={i} ref={scrollRef} className="chat chat-end my-7">
-                <div className="chat-image avatar">
-                  <div className="w-10 rounded-full">
-                    <Image
-                      width={40}
-                      height={40}
-                      className="rounded-full object-cover"
-                      src={userImg}
-                      alt="image"
-                    />
+    <>
+      {message?.messages.length === 0 && (
+        <div className="text-center py-5 h-[80vh]  text-white font-bold">
+          <p className="text-[14px]">No message created yet</p>
+        </div>
+      )}
+      {message?.messages.length > 0 && (
+        <div  className=" overflow-y-auto scrollbar-hide ">
+          <div  className="px-5 py-5 h-[82vh] 2xl:h-[84vh]">
+            {message?.messages &&
+              message?.messages?.length > 0 &&
+              message?.messages?.map((msg: Message, i: number) => {
+                return msg?.sender === user?.user?._id ? (  
+                  <div key={i} ref={scrollRef} className="chat chat-end my-7">
+                    <div className="chat-image avatar">
+                      <div className="w-10 rounded-full">
+                        <Image
+                          width={40}
+                          height={40}
+                          className="rounded-full object-cover"
+                          src={userImg}
+                          alt="image"
+                        />
+                      </div>
+                    </div>
+                    <div className="chat-bubble">{msg?.message}</div>
+                    <div className="">
+                      <div className="chat-header justify-end">
+                        <time className="text-xs opacity-50 pt-1">
+                          {moment(msg?.createdAt).fromNow()}
+                        </time>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="chat-bubble">{msg?.message}</div>
-                <div className="">
-                  <div className="chat-header justify-end">
-                    <time className="text-xs opacity-50 pt-1">
-                      {moment(msg?.createdAt).fromNow()}
-                    </time>
+                ) : (
+                  <div ref={scrollRef} className="chat chat-start my-7">
+                    <div className="chat-image avatar">
+                      <div className="w-10 rounded-full">
+                        <Image
+                          width={40}
+                          height={40}
+                          className="rounded-full object-cover"
+                          src={userImg}
+                          alt="image"
+                        />
+                      </div>
+                    </div>
+                    <div className="">
+                      <div className="chat-bubble "> {msg?.message}</div>
+                      <div className="chat-header flex justify-end">
+                        <time className="text-xs opacity-50 pt-1">
+                          {moment(msg?.createdAt).fromNow()}
+                        </time>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ) : (
-              <div ref={scrollRef} className="chat chat-start my-7">
-                <div className="chat-image avatar">
-                  <div className="w-10 rounded-full">
-                    <Image
-                      width={40}
-                      height={40}
-                      className="rounded-full object-cover"
-                      src={userImg}
-                      alt="image"
-                    />
-                  </div>
-                </div>
-                <div className="">
-                  <div className="chat-bubble "> {msg?.message}</div>
-                  <div className="chat-header flex justify-end">
-                    <time className="text-xs opacity-50 pt-1">
-                      {moment(msg?.createdAt).fromNow()}
-                    </time>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-      </div>
-      {/* {(activeUser?.callUser ||
-        call.isReceivingCall ||
-        callAccepted ||
-        !callEnded) && <VideoModal activeUsers={activeUsers} />} */}
-    </div>
+                );
+              })}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -22,12 +22,14 @@ const ActiveUser = ({ data }: any) => {
   };
 
   return (
-    <div onClick={() => handleAddFriend(data)}>
+    <div  onClick={() => handleAddFriend(data)}>
       <div className="relative w-[50px] h-[50px] cursor-pointer mx-auto">
         <Image
-          src={userImg}
+          src={data?.user?.img?data?.user?.img:userImg}
           alt="userImg"
           className="rounded-full w-full h-full"
+          width={50}
+          height={50}
         />
         <div className="w-[10px] h-[10px] bg-green-500 rounded-full absolute top-[3px] right-[3px]"></div>
       </div>

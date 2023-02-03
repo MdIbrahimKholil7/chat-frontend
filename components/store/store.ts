@@ -6,6 +6,8 @@ import authSliceReducer from '../features/auth/authSlice'
 import friendSliceReducer from '../features/friend/friendSlice'
 import messagesSliceReducer from '../features/message/messagesSlice'
 import socketSliceReducer from '../features/socket/socketSlice'
+import userSliceReducer from '../features/users/usersSlice'
+import menuSliceReducer from '../features/menuBar/menuSlice'
 
 // import { jokeApi } from './services/jokes'
 
@@ -16,7 +18,9 @@ const store = configureStore({
         auth: authSliceReducer,
         friend: friendSliceReducer,
         message: messagesSliceReducer,
-        activeUser: socketSliceReducer
+        activeUser: socketSliceReducer,
+        users: userSliceReducer,
+        menu: menuSliceReducer,
     },
 
     devTools: process.env.NODE_ENV !== "production",

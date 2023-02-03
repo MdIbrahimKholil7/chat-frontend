@@ -25,6 +25,18 @@ export const authSlice = apiSlice.injectEndpoints({
                 dispatch(userLoggedIn(result.data))
             }
         }),
+        updateUserData: builder.mutation<FetchArgs, any>({
+            query: (data: any) => ({
+                url: "/api/v1/user/update",
+                method: "PUT",
+                body: data
+            }),
+            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+                const result = await queryFulfilled;
+
+                dispatch(userLoggedIn(result.data))
+            }
+        }),
         loginUser: builder.mutation<FetchArgs, any>({
             query: (data: UserForm) => ({
                 url: "/api/v1/user/login",
@@ -49,5 +61,5 @@ export const authSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useGetUserInformationQuery, useGetAllUserQuery } = authSlice
+export const { useAddUserMutation, useLoginUserMutation, useGetUserInformationQuery, useGetAllUserQuery,useUpdateUserDataMutation } = authSlice
 

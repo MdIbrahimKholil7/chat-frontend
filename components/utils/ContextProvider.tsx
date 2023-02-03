@@ -34,14 +34,26 @@ const ContextProvider = ({ children }: any) => {
       console.log("callUser", from, name, signal);
       setCall({ isReceivingCall: true, from, signal });
     });
-  }, [checkCallUser, myVideo, resetCall]);
+  }, [checkCallUser, myVideo, resetCall, name]);
 
   useEffect(() => {
+    console.log("users");
     socket.on("callUsers", ({ from, name: callerName, signal }) => {
       console.log("callUser", from, name, signal);
       setCall({ isReceivingCall: true, from, signal });
     });
-  }, [connectionRef]);
+
+    // socket.onAny((eventName, ...args) => {
+    //   console.log("hey");
+    //   console.log(eventName);
+    // });
+  },);
+
+  // socket.on("callUsers", ({ from, name: callerName, signal }) => {
+  //   console.log("callUser", from, name, signal);
+  //   setCall({ isReceivingCall: true, from, signal });
+  // });
+
   const answerCall = () => {
     setCallAccepted(true);
 
@@ -59,12 +71,9 @@ const ContextProvider = ({ children }: any) => {
 
     connectionRef.current = peer;
   };
-  console.log(me, "from context");
+  // console.log(me, "from context");
   const callUser = (id: string, own: string) => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
-    console.log(id, "id");
-    console.log(own, "me");
-    console.log('userId',id)
     peer.on("signal", (data: any) => {
       socket.emit("callUser", {
         userToCall: id,
@@ -84,7 +93,7 @@ const ContextProvider = ({ children }: any) => {
     });
 
     connectionRef.current = peer;
-    console.log(connectionRef.current);
+    // console.log(connectionRef.current);
   };
 
   const leaveCall = () => {

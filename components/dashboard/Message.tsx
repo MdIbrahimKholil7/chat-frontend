@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ActiveUser from "./ActiveUser";
 import MessageLeftBar from "./MessageLeftBar";
 // Import css files
@@ -6,47 +6,51 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import AllUsers from "./AllUsers";
-
+import { GiHamburgerMenu } from "react-icons/gi";
 import Loader from "../utils/Loader";
 import MessengerRightBar from "./MessengerRightBar";
 import MessageBody from "./MessageBody";
 import { useGetAllUserQuery } from "../features/auth/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import MessageSend from "./MessageSend";
-import { Message, SendMessage, SocketUser } from "../types/types";
+import { Message, SocketUser } from "../types/types";
 import {
   getMessages,
   notificationMessage,
 } from "../features/message/messagesSlice";
 import { useAddNotificationMutation } from "../features/message/messageApi";
-import VideoModal from "../utils/VideoModal";
-import { SocketContext } from "../utils/ContextProvider";
+import { addUsers, updateUsersMessage } from "../features/users/usersSlice";
+import { openMenuFn } from "../features/menuBar/menuSlice";
+import OutsideClickHandler from "react-outside-click-handler";
+import ProfileModal from "../profile/ProfileModal";
+import { useCookies } from "react-cookie";
 
 const { io } = require("socket.io-client");
 
 const Message = () => {
-  const { callAccepted, callEnded, stream, callUser, call } =
-    useContext(SocketContext);
-  console.log(callAccepted);
-  // console.log(callerId)
-  console.log(call.isReceivingCall,call, stream);
   const scrollRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<any>();
   const [number, setNumber] = useState<number>(0);
   const [fetch, setFetch] = useState(false);
   const [ownSocketId, setOwnSocketId] = useState<string | undefined>("");
+  const [cookies, removeCookie]: any = useCookies(["chatUser"]);
+
   const {
     friend: { friend },
-    activeUser,
+    users,
+    message
   } = useSelector((state: any) => state);
+
   const {
     auth,
     message: { notificationMsg },
+    menu: { openMenu, openModal },
   } = useSelector((state: any) => state);
   const { name } = friend || {};
   const [activeUsers, setActiveUsers] = useState<SocketUser[] | []>([]);
   const [userSocketMsg, setUserSocketMsg] = useState<Message>();
   const [typingMessage, setTypingMessage] = useState<Message | {}>({});
+
   const dispatch = useDispatch();
   const [addNotification, { data: notification, error: notificationError }] =
     useAddNotificationMutation();
@@ -60,18 +64,20 @@ const Message = () => {
 
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
-  }, [fetch]);
+  }, [message?.messages]);
 
   useEffect(() => {
     socketRef.current = io("http://localhost:5000");
-    // dispatch(addSocket(socketRef))
+
     socketRef.current.on("sendMessageToUser", (data: Message) => {
+      console.log("data", data);
       setUserSocketMsg(data);
     });
     socketRef.current.on("sendTypingInputMsg", (data: Message) => {
       setTypingMessage(data);
     });
-  }, []);
+    dispatch(addUsers(allUser?.result));
+  }, [allUser, dispatch]);
 
   useEffect(() => {
     socketRef.current.emit("add-user", auth?.user?._id, auth?.user);
@@ -83,7 +89,6 @@ const Message = () => {
         (u: SocketUser) => u.userId === auth?.user?._id
       );
       setOwnSocketId(findArr?.socketId);
-      console.log("findArr", findArr);
       const uArr = user.filter((u: SocketUser) => u.userId !== auth?.user?._id);
       setActiveUsers(uArr);
     });
@@ -103,14 +108,16 @@ const Message = () => {
         ])
       );
     }
+
+    if (userSocketMsg?.sender) {
+      dispatch(updateUsersMessage({ sender, message }));
+    }
   }, [userSocketMsg, friend, auth?.user?._id, dispatch]);
 
   // adding notification
   useEffect(() => {
     const { sender, receiverId, message, name } = userSocketMsg || {};
-    console.log("hell", userSocketMsg);
     if (receiverId === auth?.user?._id && friend?._id !== sender) {
-      console.log("hello", userSocketMsg);
       dispatch(
         notificationMessage({
           _id: sender,
@@ -126,7 +133,6 @@ const Message = () => {
     }
   }, [userSocketMsg, friend, auth?.user?._id, dispatch, addNotification]);
 
-  // console.log(userSocketMsg, "socketMesage");
   useEffect(() => {
     if (activeUsers?.length === 1) {
       setNumber(1);
@@ -135,14 +141,15 @@ const Message = () => {
       setNumber(2);
     }
     if (activeUsers?.length === 3) {
-      setNumber(2);
+      setNumber(3);
+    }
+    if (activeUsers?.length === 4) {
+      setNumber(3);
     }
     if (activeUsers?.length >= 5) {
       setNumber(4);
     }
   }, [activeUsers, number]);
-
-  const data: number[] = [1, 2, 4, 8, 8];
 
   const settings: any = {
     dots: false,
@@ -155,14 +162,14 @@ const Message = () => {
   };
 
   if (isLoading) return <Loader />;
-
+  console.log(activeUsers)
   return (
-    <div className="bg-[#212533] h-screen text-white">
+    <div className="bg-[#212533] h-screen text-white relative">
       <div className="flex h-full">
-        <div className="w-[480px]  border-r-2 border-white max-h-screen pt-5">
+        <div className="xl:w-[400px] 2xl:w-[480px] hidden md:block border-r-2 border-white max-h-screen pt-5">
           <MessageLeftBar data={allUser} />
           <div className="cursor-pointer border-b-[1px] border-white pb-9 ">
-            <div className="px-3">
+            <div className="">
               <Slider {...settings}>
                 {activeUsers?.length &&
                   activeUsers?.map((d, i) => <ActiveUser data={d} key={i} />)}
@@ -170,9 +177,38 @@ const Message = () => {
             </div>
           </div>
           <div className="mt-14 overflow-y-auto max-h-[66%] scrollbar-hide overflow-hidden px-3">
-            <AllUsers users={allUser?.result} />
+            <AllUsers users={users?.users} />
           </div>
         </div>
+        <div>
+          <OutsideClickHandler
+            onOutsideClick={() => {
+              if (openMenu) dispatch(openMenuFn({}));
+            }}
+          >
+            <div
+              className={`w-[330px] block md:hidden border-r-2 max-h-screen pt-5 absolute top-0 ${
+                openMenu ? "left-0" : "left-[-500px]"
+              } h-full bg-[#2d303a] duration-300 z-50`}
+            >
+              <MessageLeftBar data={allUser} />
+              <div className="cursor-pointer border-b-[1px] border-white pb-9 ">
+                <div className="px-3">
+                  <Slider {...settings}>
+                    {activeUsers?.length &&
+                      activeUsers?.map((d, i) => (
+                        <ActiveUser data={d} key={i} />
+                      ))}
+                  </Slider>
+                </div>
+              </div>
+              <div className="mt-14 overflow-y-auto max-h-[66%] scrollbar-hide overflow-hidden px-3">
+                <AllUsers users={users?.users} />
+              </div>
+            </div>
+          </OutsideClickHandler>
+        </div>
+
         <div className=" w-full h-full">
           {name ? (
             <>
@@ -197,16 +233,24 @@ const Message = () => {
               </div>
             </>
           ) : (
-            <div className="w-full h-full flex justify-center items-center text-white">
-              <h3 className="text-2xl font-bold font-serif">
+            <div className="w-full h-full  flex flex-col justify-center items-center text-white">
+              <div className="w-full h-full block md:hidden">
+                <span
+                  onClick={() => dispatch(openMenuFn({}))}
+                  className="border-b-2 border-white block pb-2 px-3 cursor-pointer pt-3"
+                >
+                  <GiHamburgerMenu className="text-2xl text-white " />
+                </span>
+              </div>
+              <h3 className="text-[18px] px-2 md:text-2xl font-bold font-serif h-full md:flex md:justify-center md:items-center">
                 Please select your friend to start chat
               </h3>
             </div>
           )}
         </div>
       </div>
-      {activeUser?.callUser && (
-        <VideoModal ownSocketId={ownSocketId} activeUsers={activeUsers} />
+      {openModal && (
+        <ProfileModal />
       )}
     </div>
   );

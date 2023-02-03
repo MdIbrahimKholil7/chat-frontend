@@ -12,7 +12,8 @@ export type Users = {
         name: string,
         email: string,
         _id: string,
-        updatedAt?:string
+        updatedAt?:string,
+        img?: string
     },
     lastMsg:{
         message: string,

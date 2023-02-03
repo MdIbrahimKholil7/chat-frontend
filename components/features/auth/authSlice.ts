@@ -2,12 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface State {
     accessToken: string | undefined,
-    user: undefined | {}
+    user: undefined | {},
+    img:string|undefined
 }
 
 const initialState: State = {
     accessToken: undefined,
     user: undefined,
+    img:undefined
 };
 
 const authSlice = createSlice({
@@ -22,9 +24,13 @@ const authSlice = createSlice({
             state.accessToken = undefined;
             state.user = undefined;
         },
+        addImg: (state,action) => {
+            state.img = action.payload;
+          
+        },
     },
 });
 
 
-export const { userLoggedIn, userLoggedOut } = authSlice.actions;
+export const { userLoggedIn, userLoggedOut,addImg } = authSlice.actions;
 export default authSlice.reducer;

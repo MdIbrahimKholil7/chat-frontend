@@ -38,6 +38,7 @@ const VideoModal = ({ activeUsers,ownSocketId }: Props) => {
 
   useEffect(() => {
     const findId = activeUsers.find((d) => d.user?._id === friend?.friend?._id);
+    console.log(findId)
     if (findId?.socketId) {
       setCallerId(findId.socketId);
     }
@@ -110,7 +111,7 @@ const VideoModal = ({ activeUsers,ownSocketId }: Props) => {
               ) : (
                 <button
                   className="btn bg-green-600 text-white font-bold"
-                  onClick={() => callUser(friend?.friend?._id,ownSocketId)}
+                  onClick={() => callUser(callerId,ownSocketId)}
                 >
                   Call
                 </button>

@@ -13,16 +13,23 @@ import {
 import {
   addNotificationFromDb,
   resetAllNotificationFromDb,
+  resetMessages,
 } from "../features/message/messagesSlice";
-import { msgNotification, Users } from "../types/types";
+import { friend, msgNotification, Users } from "../types/types";
 import OutsideClickHandler from "react-outside-click-handler";
 import moment from "moment";
+import { addFriend } from "../features/friend/friendSlice";
+import { userLoggedIn } from "../features/auth/authSlice";
+import ProfileModal from "../profile/ProfileModal";
+import { openProfileModal } from "../features/menuBar/menuSlice";
 
 const MessageLeftBar = ({ data }: any) => {
   const [cookies, removeCookie]: any = useCookies(["chatUser"]);
-  const { name, _id } = cookies?.chatUser?.data?.result || {};
+  const { name, _id,img} = cookies?.chatUser?.data?.result || {};
   const [notification, setNotification] = useState<boolean>(false);
   const [outSide, setOutSide] = useState<boolean>(false);
+  const [value, setValue] = useState<string>("");
+  const [openModal, setOpenModal] = useState<any | null>(null);
   const {
     data: notificationData,
     isLoading,
@@ -41,7 +48,10 @@ const MessageLeftBar = ({ data }: any) => {
 
   const dispatch = useDispatch();
   const { notificationMsg, totalNotifications } = useSelector(
-    (state: any) => state.message
+    (state: any) => state.message||{}
+  );
+  const { img:authImg } = useSelector(
+    (state: any) => state.auth ||{}
   );
 
   useEffect(() => {
@@ -63,24 +73,55 @@ const MessageLeftBar = ({ data }: any) => {
     setNotification(true);
   };
 
+  const handleAddFriend = (user: friend): void => {
+    
+    dispatch(addFriend(user));
+    dispatch(userLoggedIn(cookies?.chatUser));
+    if (user?._id !== _id) {
+      dispatch(resetMessages([]));
+    }
+  };
+  
   return (
     <div>
       <div className="flex justify-between items-center px-3 w-full">
         <div className="flex items-center gap-3">
           <div className="relative w-[50px] h-[50px] cursor-pointer">
             <Image
-              src={userImg}
+              src={(img||authImg)?(img||authImg):userImg}
               alt="userImg"
-              className="rounded-full w-full h-full"
+              className="rounded-full w-full h-full object-cover"
+              width={50}
+              height={50}
             />
             <div className="w-[10px] h-[10px] bg-green-500 rounded-full absolute top-[3px] right-[3px]"></div>
           </div>
           <p>{name}</p>
         </div>
         <div className="flex items-center gap-4">
-          <p>
+          {/* <p>
             <BsThreeDots className="text-xl text-white font-bold cursor-pointer" />
-          </p>
+          </p> */}
+          <div className="dropdown dropdown-end bg-transparent">
+            <label tabIndex={0} className="">
+              <BsThreeDots className="text-xl text-white font-bold cursor-pointer" />
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-black mt-2"
+            >
+              <li>
+                <label
+                  onClick={() =>
+                    dispatch(openProfileModal(cookies?.chatUser?.data?.result))
+                  }
+                  htmlFor="my-modal-6"
+                >
+                  Update Profile
+                </label>
+              </li>
+            </ul>
+          </div>
           <p>
             <OutsideClickHandler
               onOutsideClick={() => {
@@ -135,14 +176,46 @@ const MessageLeftBar = ({ data }: any) => {
           </p>
         </div>
       </div>
-      <div className="my-7 px-3">
-        <form action="">
-          <input
-            type="text"
-            placeholder="Search here"
-            className="input input-bordered w-full bg-[#0b0f1d]"
-          />
-        </form>
+      <div className="my-7 px-3 relative">
+        <input
+          type="text"
+          placeholder="Search here"
+          className="input input-bordered w-full bg-[#0b0f1d]"
+          onChange={(e: React.FormEvent<HTMLInputElement>): void => {
+            setValue(e.currentTarget.value);
+          }}
+          value={value}
+        />
+        {value && (
+          <div className="w-full bg-[#545556] p-2">
+            {data?.result
+              ?.filter((data: Users) => {
+                return (
+                  value &&
+                  data.friendInfo.name
+                    .toLocaleLowerCase()
+                    .includes(value.toLocaleLowerCase())
+                );
+              })
+              .map((data: Users) => (
+                <div
+                  onClick={() => {
+                    handleAddFriend(data.friendInfo);
+                    setValue("");
+                  }}
+                  className="bg-white p-2 text-black rounded-md cursor-pointer flex gap-3 my-2 justify-start"
+                  key={data.friendInfo._id}
+                >
+                  <Image
+                    src={userImg}
+                    alt="userImg"
+                    className="rounded-full  w-[30px] h-[30px]"
+                  />
+                  {data.friendInfo.name}
+                </div>
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );

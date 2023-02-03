@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { useGetUserInformationQuery } from "../features/auth/authApi";
-import { userLoggedIn } from "../features/auth/authSlice";
+import { addImg, userLoggedIn } from "../features/auth/authSlice";
 import Loader from "./Loader";
 type Props = {
   children?: React.ReactNode | JSX.Element | JSX.Element[] | any;
@@ -11,7 +11,7 @@ type Props = {
 
 const PrivateRoute = ({ children }: Props) => {
   const router = useRouter();
-  const [cookies, removeCookie]: any = useCookies(["chatUser"]);
+  const [cookies, removeCookie,setCookie]: any = useCookies(["chatUser"]);
   const dispatch = useDispatch();
 
   useEffect((): any => {
@@ -26,8 +26,10 @@ const PrivateRoute = ({ children }: Props) => {
 
   useEffect((): any => {
     if (cookies?.chatUser?.data?.token) {
+      console.log('data',data)
       if (data) {
         cookies.chatUser.data.result = data?.result;
+        dispatch(addImg(data.result?.img))
       }
       if (isError) {
         removeCookie("chatUser" /* {path:'/dashboard'} */);
@@ -36,7 +38,7 @@ const PrivateRoute = ({ children }: Props) => {
     } else {
       router.push("/");
     }
-  }, [data, isError, error, cookies, router, removeCookie]);
+  }, [data, isError, error, cookies, router, removeCookie,dispatch]);
 
   if (isLoading) return <Loader />;
 

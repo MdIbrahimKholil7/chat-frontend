@@ -7,10 +7,9 @@ import { UserForm } from '../types/types'
  const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://chat-backend-ehpd.onrender.com/',
+    baseUrl: 'https://mern-chat-backend-two.vercel.app/',
     prepareHeaders: async (headers, { getState, endpoint }: any) => {
       const token = getState()?.auth?.accessToken;
-     
       headers.set("Authorization", `Bearer ${token}`);
       return headers;
     },

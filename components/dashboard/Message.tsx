@@ -67,10 +67,9 @@ const Message = () => {
   }, [message?.messages]);
 
   useEffect(() => {
-    socketRef.current = io("https://socket-server-8m58.onrender.com");
 
+    socketRef.current = io("https://socket-chat-server-v9fs.onrender.com");
     socketRef.current.on("sendMessageToUser", (data: Message) => {
-      console.log("data", data);
       setUserSocketMsg(data);
     });
     socketRef.current.on("sendTypingInputMsg", (data: Message) => {
@@ -176,7 +175,7 @@ const Message = () => {
               </Slider>
             </div>
           </div>
-          <div className="mt-4 overflow-y-auto lg:max-h-[50%] xl:max-h-[58%%] 2xl:max-h-[66%] scrollbar-hide overflow-hidden px-3 bg-red-500">
+          <div className="mt-4 overflow-y-auto lg:max-h-[65%] xl:max-h-[58%%] 2xl:max-h-[73%] scrollbar-hide overflow-hidden px-3 ">
             <AllUsers users={users?.users} />
           </div>
         </div>

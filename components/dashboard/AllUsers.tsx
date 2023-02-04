@@ -28,7 +28,9 @@ const AllUsers = ({ users }: any) => {
     <div>
       <div>
         {users &&
-          users?.map((user: Users, i: number) => (
+          users?.map((user: Users, i: number) => {
+           
+            return (
             <div
               onClick={() => handleAddFriend(user.friendInfo)}
               key={i}
@@ -76,7 +78,7 @@ const AllUsers = ({ users }: any) => {
                 </div>
               </div>
             </div>
-          ))}
+          )})}
       </div>
     </div>
   );

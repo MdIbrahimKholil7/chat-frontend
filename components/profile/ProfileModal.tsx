@@ -80,7 +80,7 @@ const ProfileModal = () => {
           >
             ✕
           </label>
-          <div className="card flex-shrink-0 w-[600px] shadow-2xl bg-base-100 mt-10">
+          <div className="card flex-shrink-0 max-w-[430px] md:w-[600px] shadow-2xl bg-base-100 mt-10">
             <form onSubmit={handleForm} className="card-body">
               <div className="form-control">
                 <label className="label">

@@ -179,40 +179,42 @@ const MessageLeftBar = ({ data }: any) => {
         <input
           type="text"
           placeholder="Search here"
-          className="input input-bordered w-full bg-[#0b0f1d]"
+          className="input input-bordered w-full bg-[#0b0f1d] "
           onChange={(e: React.FormEvent<HTMLInputElement>): void => {
             setValue(e.currentTarget.value);
           }}
           value={value}
         />
         {value && (
-          <div className="w-full bg-[#545556] p-2 absolute top-6 left-0  h-auto z-[1200]">
-            {data?.result
-              ?.filter((data: Users) => {
-                return (
-                  value &&
-                  data.friendInfo.name
-                    .toLocaleLowerCase()
-                    .includes(value.toLocaleLowerCase())
-                );
-              })
-              .map((data: Users) => (
-                <div
-                  onClick={() => {
-                    handleAddFriend(data.friendInfo);
-                    setValue("");
-                  }}
-                  className="bg-white p-2 text-black rounded-md cursor-pointer flex gap-3 my-2 justify-start"
-                  key={data.friendInfo._id}
-                >
-                  <Image
-                    src={userImg}
-                    alt="userImg"
-                    className="rounded-full  w-[30px] h-[30px]"
-                  />
-                  {data.friendInfo.name}
-                </div>
-              ))}
+          <div className="px-2  absolute top-[57px] left-0 w-full z-[1200]">
+            <div className="w-full bg-[#545556] p-2 rounded-md  h-auto z-[1200] ">
+              {data?.result
+                ?.filter((data: Users) => {
+                  return (
+                    value &&
+                    data.friendInfo.name
+                      .toLocaleLowerCase()
+                      .includes(value.toLocaleLowerCase())
+                  );
+                })
+                .map((data: Users) => (
+                  <div
+                    onClick={() => {
+                      handleAddFriend(data.friendInfo);
+                      setValue("");
+                    }}
+                    className="bg-white p-2 text-black rounded-md cursor-pointer flex gap-3 my-2 justify-start"
+                    key={data.friendInfo._id}
+                  >
+                    <Image
+                      src={userImg}
+                      alt="userImg"
+                      className="rounded-full  w-[30px] h-[30px]"
+                    />
+                    {data.friendInfo.name}
+                  </div>
+                ))}
+            </div>
           </div>
         )}
       </div>

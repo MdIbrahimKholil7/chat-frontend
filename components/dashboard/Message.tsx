@@ -66,6 +66,7 @@ const Message = () => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [message?.messages]);
 
+  
   useEffect(() => {
 
     socketRef.current = io("https://socket-chat-server-v9fs.onrender.com");

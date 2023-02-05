@@ -24,7 +24,7 @@ const MessageBody = ({ scrollRef, socketRef, activeUsers }: Props) => {
   const user = useSelector((state: any) => state.auth);
 
   const {
-    friend: { _id },
+    friend: { _id,img },
   } = useSelector((state: any) => state.friend);
 
   const {
@@ -51,7 +51,7 @@ const MessageBody = ({ scrollRef, socketRef, activeUsers }: Props) => {
   return (
     <>
       {!message?.messages.length && !isLoading &&(
-        <div className="text-center py-5 h-[80vh]  text-white font-bold">
+        <div className="text-center py-5 h-[75vh] md:h-[80vh]  text-white font-bold">
           <p className="text-[14px]">No message created yet</p>
         </div>
       )}
@@ -74,7 +74,7 @@ const MessageBody = ({ scrollRef, socketRef, activeUsers }: Props) => {
                           width={40}
                           height={40}
                           className="rounded-full object-cover"
-                          src={userImg}
+                          src={user?.user?.img?user?.user?.img:userImg}
                           alt="image"
                         />
                       </div>
@@ -96,7 +96,7 @@ const MessageBody = ({ scrollRef, socketRef, activeUsers }: Props) => {
                           width={40}
                           height={40}
                           className="rounded-full object-cover"
-                          src={userImg}
+                          src={img?img:userImg}
                           alt="image"
                         />
                       </div>

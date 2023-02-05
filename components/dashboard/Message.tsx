@@ -215,7 +215,7 @@ const Message = () => {
                 typingMessage={typingMessage}
                 activeUsers={activeUsers}
               />
-              <div className="max-h-[82%] overflow-y-auto scrollbar-hide">
+              <div className="max-h-[75%] md:max-h-[82%] overflow-y-auto scrollbar-hide">
                 <MessageBody
                   activeUsers={activeUsers}
                   socketRef={socketRef}

@@ -66,10 +66,10 @@ const Message = () => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [message?.messages]);
 
-  
+
   useEffect(() => {
 
-    socketRef.current = io("https://socket-chat-server-v9fs.onrender.com");
+    socketRef.current = io("https://socket-backend-v6ot.vercel.app/");
     socketRef.current.on("sendMessageToUser", (data: Message) => {
       setUserSocketMsg(data);
     });

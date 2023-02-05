@@ -34,7 +34,7 @@ const MessageSend = ({ setFetch, fetch, socketRef, activeUsers }: Props) => {
   // get friend details
   const {
     friend: { _id },
-  } = useSelector((state: any) => state.friend);
+  } = useSelector((state: any) => state.friend || {});
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     socketRef.current.emit("sendTypingInput", {
@@ -45,7 +45,7 @@ const MessageSend = ({ setFetch, fetch, socketRef, activeUsers }: Props) => {
   };
 
   useEffect(() => {
-    const user = activeUsers.some((u: SocketUser) => u.user._id === _id);
+    const user = activeUsers.some((u: SocketUser) => u?.user?._id === _id);
     setIsAddNotification(user);
  
   }, [activeUsers, _id]);

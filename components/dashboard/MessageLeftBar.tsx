@@ -87,7 +87,7 @@ const MessageLeftBar = ({ data }: any) => {
         <div className="flex items-center gap-3">
           <div className="relative w-[50px] h-[50px] cursor-pointer">
             <Image
-              src={img || authImg ? img || authImg : userImg}
+              src={authImg ? authImg : userImg}
               alt="userImg"
               className="rounded-full w-full h-full object-cover"
               width={50}

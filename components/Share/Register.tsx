@@ -164,7 +164,7 @@ const Register = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  type="text"
+                  type="password"
                   placeholder="password"
                   className="input input-bordered"
                   name="password"
@@ -181,7 +181,7 @@ const Register = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, confirmPass: e.target.value })
                     }
-                    type="text"
+                    type="password"
                     placeholder="password"
                     className="input input-bordered"
                     name="confirmPass"

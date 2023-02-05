@@ -19,7 +19,7 @@ const ProfileModal = () => {
   const { img: authImg, name: authName } = useSelector(
     (state: any) => state.auth || {}
   );
- 
+
   const [img, setImg] = useState<string | any>(
     authImg
       ? authImg
@@ -29,10 +29,11 @@ const ProfileModal = () => {
     useUpdateUserDataMutation();
   const [cookies, removeCookie]: any = useCookies(["chatUser"]);
   const dispatch = useDispatch();
-
+  const [loading, setLoading] = useState<boolean>(false);
   const onImageChange = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
+    setLoading(true);
     if ("files" in e.target) {
       const formData = new FormData();
       const file: any = e.target.files?.[0];
@@ -49,8 +50,10 @@ const ProfileModal = () => {
         .then((res) => res.json())
         .then((data: any) => {
           setImg(data.url);
+          setLoading(false);
         });
     }
+    // setLoading(false);
   };
 
   const handleForm = (e: React.SyntheticEvent) => {
@@ -64,7 +67,6 @@ const ProfileModal = () => {
     dispatch(addImg(img));
     dispatch(addName(nameInput));
     dispatch(openProfileModal(null));
-  
   };
 
   return (
@@ -111,7 +113,7 @@ const ProfileModal = () => {
                   className="label text-center flex justify-center items-center"
                 >
                   <span className="label-text btn btn-primary text-white text-center ">
-                    Select Image
+                    {loading ? "Uploading..." : "Select Image"}
                   </span>
                 </label>
                 <input

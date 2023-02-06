@@ -69,7 +69,7 @@ const Message = () => {
 
   useEffect(() => {
 
-    socketRef.current = io("https://socket-backend-v6ot.vercel.app/");
+    socketRef.current = io("https://socket-backend.up.railway.app/",);
     socketRef.current.on("sendMessageToUser", (data: Message) => {
       setUserSocketMsg(data);
     });

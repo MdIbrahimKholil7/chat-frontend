@@ -1,6 +1,7 @@
 # Its a Chat Application
 ## Server site link https://github.com/MdIbrahimKholil7/mern-chat-backend
 ## Website link https://chat-frontend-mocha.vercel.app/
+
 ## My website feature
 - Users can chat with another user
 - Users can update their profile and name
@@ -8,7 +9,6 @@
 - Users can see all the real-time message and notification and read and un-read messages
 - It will show which user is typing the message
 
--
 ### Which technology i have used in the site
 - html & css3
 - tailwind css

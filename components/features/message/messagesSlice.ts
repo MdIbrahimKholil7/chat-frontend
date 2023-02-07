@@ -32,7 +32,7 @@ const messagesSlice = createSlice({
             state.typingMessage = action.payload;
         },
         notificationMessage: (state, action) => {
-            console.log(action.payload, 'msg not')
+         
 
             if (state.notificationMsg.length === 0) {
                 state.notificationMsg.push({

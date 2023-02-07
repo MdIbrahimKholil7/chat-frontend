@@ -49,7 +49,7 @@ const Register = () => {
       setFormError({
         message: "",
       });
-      // console.log(loginData);
+    
 
       setCookie("chatUser", { data: loginData } /* { path: '/dashboard' } */);
       router.push("/Home");

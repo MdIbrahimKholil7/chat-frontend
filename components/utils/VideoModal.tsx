@@ -38,17 +38,12 @@ const VideoModal = ({ activeUsers,ownSocketId }: Props) => {
 
   useEffect(() => {
     const findId = activeUsers.find((d) => d.user?._id === friend?.friend?._id);
-    console.log(findId)
+ 
     if (findId?.socketId) {
       setCallerId(findId.socketId);
     }
   }, [activeUsers, friend?.friend?._id]);
 
-//   console.log(friend);
-  console.log(activeUsers);
-  console.log(callAccepted)
-//   console.log(callerId)
-  console.log(call.isReceivingCall)
   return (
     <div>
       {/* The button to open modal */}

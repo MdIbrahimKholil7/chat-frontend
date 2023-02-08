@@ -95,7 +95,7 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen py-20">
+    <div className="min-h-screen py-20">
       <h1 className="text-center my-10 text-2xl font-bold text-white">
         Chat App
       </h1>

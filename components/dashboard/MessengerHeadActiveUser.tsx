@@ -17,10 +17,10 @@ const MessengerHeadActiveUser = ({ activeUsers }: Props) => {
     <div>
       <div className="relative w-[50px] h-[50px] cursor-pointer">
         <Image
-          src={userImg}
+          src={friend?.friend?.img ? friend?.friend?.img : userImg}
           alt="userImg"
-          //   height={50}
-          //   width={50}
+            height={50}
+            width={50}
           className="rounded-full w-full h-full"
         />
         <div
